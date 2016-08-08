@@ -610,6 +610,7 @@ public class DragFlowLayout extends FlowLayout {
 
         /**
          * add order items to the last.
+         * @param datas the datas
          */
         public void addItems(Object...datas){
             for(int i=0,size = datas.length ;i<size ; i++){
@@ -618,6 +619,8 @@ public class DragFlowLayout extends FlowLayout {
         }
         /**
          * add order items to the last.
+         * @param list the list data
+         *  @param <T> the t
          */
         public <T> void addItems(List<T> list){
             for(int i=0,size = list.size() ;i<size ; i++){
@@ -642,6 +645,7 @@ public class DragFlowLayout extends FlowLayout {
          * add items  from target startIndex and data.
          * @param startIndex the start index to add
          * @param data the data.
+         * @param <T> the t
          */
         public <T> void addItems(int startIndex, List<T> data){
             if(startIndex > getItemCount()){
