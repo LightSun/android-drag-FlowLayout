@@ -6,7 +6,7 @@ this is a draggable flow layout lib.
 ## 特点
  - 1, 类似可拖拽的GridView. 不过gridView 宽度/个数是固定的。 这个布局item宽度是不定的。
  - 2，长按item拖拽，如果要处理点击事件请调用。
- ```java
+```java
   mDragflowLayout.setOnItemClickListener(new DragFlowLayout.OnItemClickListener() {
             @Override
             public boolean performClick(DragFlowLayout dragFlowLayout, View child,
@@ -24,7 +24,7 @@ this is a draggable flow layout lib.
                 return performed;
             }
         });
- ```
+```
  - 3，可嵌套ScrollerView.  demo就是。
  - 4, 如果想禁止某些Item拖拽请实现 {@link IDraggable} 接口 .
  
