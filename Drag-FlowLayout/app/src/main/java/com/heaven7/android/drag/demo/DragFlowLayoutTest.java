@@ -31,6 +31,7 @@ public class DragFlowLayoutTest extends BaseActivity {
 
     @Override
     protected void initView() {
+       // mDragflowLayout.setLayoutTransition();
         mDragflowLayout.setOnItemClickListener(new DragFlowLayout.OnItemClickListener() {
             @Override
             public boolean performClick(DragFlowLayout dragFlowLayout, View child,
@@ -69,6 +70,8 @@ public class DragFlowLayoutTest extends BaseActivity {
                 return (TestBean) itemView.getTag();
             }
         });
+        //预存指定个数的Item. 这些Item会反复使用
+        mDragflowLayout.prepareItemsByCount(10);
     }
 
     @Override

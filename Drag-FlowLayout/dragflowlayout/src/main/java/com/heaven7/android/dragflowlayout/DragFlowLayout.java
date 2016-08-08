@@ -28,7 +28,7 @@ import java.util.Locale;
 public class DragFlowLayout extends FlowLayout {
 
     private static final String TAG = "DragGridLayout";
-    private static final Debugger sDebugger = new Debugger(TAG);
+    /*private*/ static final Debugger sDebugger = new Debugger(TAG);
 
     private static final int INVALID_INDXE = -1;
 
@@ -105,6 +105,15 @@ public class DragFlowLayout extends FlowLayout {
      */
     static abstract class Callback {
 
+        private final DragFlowLayout mParent;
+
+        Callback(DragFlowLayout parent) {
+            this.mParent = parent;
+        }
+        public DragFlowLayout getDragFlowLauout(){
+            return mParent;
+        }
+
         /**
          * set the child data by target drag state.
          * @param child the direct child of DragFlowLayout
@@ -148,6 +157,7 @@ public class DragFlowLayout extends FlowLayout {
         public boolean isChildDraggable(View child) {
             return true;
         }
+
     }
 
     public DragFlowLayout(Context context) {
@@ -193,7 +203,8 @@ public class DragFlowLayout extends FlowLayout {
         if(adapter == null){
             throw new NullPointerException();
         }
-        this.mCallback = new DefaultDragCallback<T>(adapter);
+        this.mCallback = new DefaultDragCallback<T>(this, adapter);
+        this.mItemManager.attachViewManagerListener(mCallback);
     }
 
     /**
@@ -205,6 +216,15 @@ public class DragFlowLayout extends FlowLayout {
             mDragManager = new DragItemManager();
         }
         return mDragManager;
+    }
+
+    /**
+     * prepare items by the target count, this is useful for recycle item view.
+     * must called after {@link #setDragAdapter(DragAdapter)}.
+     * @param count the  count of items
+     */
+    public void prepareItemsByCount(int count){
+        mCallback.prepareItemsByCount(count);
     }
 
     /**
@@ -275,7 +295,7 @@ public class DragFlowLayout extends FlowLayout {
             centerX = mTempLocation[0] + item.view.getWidth()/2;
             centerY = mTempLocation[1] + item.view.getHeight()/2;
             if(isViewUnderInScreen(view, centerX, centerY, false)  && item != mItemManager.mDragItem
-                   && mCallback.isChildDraggable(item.view) ){
+                   && mCallback.isChildDraggable( item.view) ){
                 sDebugger.i("onMove_isViewUnderInScreen","index = " + item.index );
                 /**
                  * Drag到target目标的center时，判断有没有已经hold item, 有的话，先删除旧的,
@@ -296,7 +316,8 @@ public class DragFlowLayout extends FlowLayout {
             addView(hold, index);
             //reset drag item and alert view
             mItemManager.findDragItem(hold);
-            mCallback.setWindowViewByChild(mWindomHelper.getView(), mItemManager.mDragItem.view, mDragState);
+            mCallback.setWindowViewByChild(mWindomHelper.getView(),
+                    mItemManager.mDragItem.view, mDragState);
             sDebugger.i("onMove","hold index = " + mItemManager.mDragItem.index);
         }
         return found;
@@ -459,6 +480,11 @@ public class DragFlowLayout extends FlowLayout {
         final List<Item> mItems = new ArrayList<>();
         /** 对应的拖拽item */
         Item mDragItem = null;
+        IViewManagerListener mListener;
+
+        public void attachViewManagerListener(IViewManagerListener l){
+            this.mListener = l;
+        }
 
         public void onAddView(View child, int index, LayoutParams params) {
             index = index != -1 ? index : mItems.size();
@@ -477,11 +503,14 @@ public class DragFlowLayout extends FlowLayout {
             mItems.add(item);
             Collections.sort(mItems, sComparator);
             //debugWhenDebug("onAddView",mItems.toString());
+            if(mListener !=null){
+                mListener.onAddView(child,index,params);
+            }
         }
 
         public void onRemoveViewAt(int index) {
             sDebugger.d("onRemoveViewAt", "index = " + index );
-            Item item;
+            Item item = null;
             for(int i=0,size = mItems.size() ;i<size ;i++){
                 item =  mItems.get(i);
                 if(item.index > index){
@@ -491,10 +520,13 @@ public class DragFlowLayout extends FlowLayout {
             mItems.remove(index);
             Collections.sort(mItems, sComparator);
            // debugWhenDebug("onAddView",mItems.toString());
+            if(mListener !=null && item!=null){
+                mListener.onRemoveView(item.view, index);
+            }
         }
 
         public void onRemoveView(View view) {
-            Item item;
+            Item item ;
             int targetIndex = INVALID_INDXE;
             for(int i=0, size = mItems.size() ;i<size ;i++){
                 item =  mItems.get(i);
@@ -517,8 +549,17 @@ public class DragFlowLayout extends FlowLayout {
             mItems.remove(targetIndex);
             Collections.sort(mItems, sComparator);
             //debugWhenDebug("onAddView",mItems.toString());
+            if(mListener !=null){
+                mListener.onRemoveView(view, targetIndex);
+            }
         }
         public void onRemoveAllViews() {
+            if(mListener !=null){
+                IViewManagerListener mViewManager = this.mListener;
+                for (int size = mItems.size(), i = size - 1; i >= 0; i--) {
+                    mViewManager.onRemoveView(mItems.get(i).view, i);
+                }
+            }
             mItems.clear();
         }
 
@@ -570,7 +611,8 @@ public class DragFlowLayout extends FlowLayout {
             sDebugger.i("mGestureDetector_onLongPress","----------------- >");
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
             performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
-            if(mDragState!= DRAG_STATE_DRAGGING  && mTouchChild!=null && mCallback.isChildDraggable(mTouchChild)) {
+            if(mDragState!= DRAG_STATE_DRAGGING  && mTouchChild!=null
+                    && mCallback.isChildDraggable( mTouchChild)) {
                 setDragState(DRAG_STATE_DRAGGING, false);
                 checkForDrag(0, false);
             }
@@ -678,7 +720,13 @@ public class DragFlowLayout extends FlowLayout {
         public void removeItem(int index) {
             removeViewAt(index);
         }
-
+        /**
+         * remove item by child
+         * @param child the direct child of DragFlowLayout
+         */
+        public void removeItem(View child){
+            removeView(child);
+        }
         /**
          * remove item by data
          * @param data the data
