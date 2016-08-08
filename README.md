@@ -90,7 +90,8 @@ this is a draggable flow layout lib.
         }
     }
 ```
-- 5, 更多详情请参见[demo](https://github.com/LightSun/android-drag-FlowLayout/blob/master/Drag-FlowLayout/app/src/main/java/com/heaven7/android/drag/demo/DragFlowLayoutTest.java). 
+- 5, 如果要使用布局动画，请用ViewGroup.setLayoutTransaction(...) .
+- 6, 更多详情请参见[demo](https://github.com/LightSun/android-drag-FlowLayout/blob/master/Drag-FlowLayout/app/src/main/java/com/heaven7/android/drag/demo/DragFlowLayoutTest.java). 
 
 ## Gradle Config
 ```java
