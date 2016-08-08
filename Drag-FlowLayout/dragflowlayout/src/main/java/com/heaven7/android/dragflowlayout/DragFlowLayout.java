@@ -593,6 +593,22 @@ public class DragFlowLayout extends FlowLayout {
         }
 
         /**
+         * get all items
+         * @param <T> the t
+         * @return the items that not removed
+         */
+        public <T> List<T> getItems(){
+            final DragAdapter adapter = getDragAdapter();
+            List<T> list = new ArrayList<>();
+            T t;
+            for (int i=0 ,size = getChildCount(); i < size;  i++) {
+                t = (T) adapter.getData(getChildAt(i));
+                list.add(t);
+            }
+            return list;
+        }
+
+        /**
          * add order items to the last.
          */
         public void addItems(Object...datas){
