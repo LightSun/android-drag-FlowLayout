@@ -28,7 +28,7 @@ this is a draggable flow layout lib.
  - 3，可嵌套ScrollerView.  demo就是。
  - 4, 如果想禁止某些Item拖拽请实现 {@link IDraggable} 接口 .
  
- ## 使用步骤
+## 使用步骤
 - 1, 导入下面的gradle 配置。
 - 2，设置点击事件处理器 和 数据适配器.
 ```java
