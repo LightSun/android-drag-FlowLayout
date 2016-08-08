@@ -7,8 +7,11 @@ import android.support.annotation.NonNull;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
+import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
+import android.view.SoundEffectConstants;
 import android.view.View;
+import android.view.accessibility.AccessibilityEvent;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -547,6 +550,7 @@ public class DragFlowLayout extends FlowLayout {
         }
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
+            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);
             if(mClickListener == null){
                 return false;
             }
@@ -554,7 +558,9 @@ public class DragFlowLayout extends FlowLayout {
             removeCallbacks(mCheckForDrag);
             boolean performed = mClickListener.performClick(DragFlowLayout.this, mTouchChild, e , mDragState);
             sDebugger.i("mGestureDetector_onSingleTapUp","----------------- > performed = " + performed);
-            if(!performed && mReDrag){
+            if(performed){
+                playSoundEffect(SoundEffectConstants.CLICK);
+            }else if (mReDrag) {
                 checkForDrag(0, true);
             }
             return performed;
@@ -562,6 +568,8 @@ public class DragFlowLayout extends FlowLayout {
         @Override
         public void onLongPress(MotionEvent e) {
             sDebugger.i("mGestureDetector_onLongPress","----------------- >");
+            sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
+            performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
             if(mDragState!= DRAG_STATE_DRAGGING  && mTouchChild!=null && mCallback.isChildDraggable(mTouchChild)) {
                 setDragState(DRAG_STATE_DRAGGING, false);
                 checkForDrag(0, false);
