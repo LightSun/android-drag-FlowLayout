@@ -316,7 +316,7 @@ public class DragFlowLayout extends FlowLayout {
 
     private void checkCallback() {
         if(mCallback == null){
-            throw new IllegalStateException("you must call #setCallback first.");
+            throw new IllegalStateException("you must call #setDragAdapter first.");
         }
     }
 
