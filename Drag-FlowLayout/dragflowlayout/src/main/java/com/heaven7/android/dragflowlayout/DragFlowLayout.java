@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * the drag flow layout
+ * the drag flow layout: you should not use normal onclick listener for child or else may cause problem.
  * Created by heaven7 on 2016/8/1.
  */
 public class DragFlowLayout extends FlowLayout {
@@ -216,6 +216,14 @@ public class DragFlowLayout extends FlowLayout {
             mDragManager = new DragItemManager();
         }
         return mDragManager;
+    }
+
+    /**
+     *  get the drag adapter
+     * @return the DragAdapter
+     */
+    public DragAdapter getDragAdapter() {
+        return mCallback.getDragAdapter();
     }
 
     /**
@@ -426,14 +434,19 @@ public class DragFlowLayout extends FlowLayout {
     }
 
     @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        return super.onInterceptTouchEvent(ev);
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //infoWhenDebug("onTouchEvent", event.toString());
-        //infoWhenDebug("onTouchEvent", "------> mDispatchToAlertWindow = " + mDispatchToAlertWindow +" ,mIsDragState = " + mIsDragState);
+        sDebugger.i("onTouchEvent", event.toString());
+        //sDebugger.i("onTouchEvent", "------> mDispatchToAlertWindow = " + mDispatchToAlertWindow +" ,mIsDragState = " + mIsDragState);
         mCancelled = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
         final boolean handled = mGestureDetector.onTouchEvent(event);
         //解决ScrollView嵌套DragFlowLayout时，引起的事件冲突
         if(getParent()!=null){
-            getParent().requestDisallowInterceptTouchEvent(mDispatchToAlertWindow);
+            getParent().requestDisallowInterceptTouchEvent( mTouchChild != null );
         }
         if(mDispatchToAlertWindow){
             mWindomHelper.getView().dispatchTouchEvent(event);
@@ -624,9 +637,7 @@ public class DragFlowLayout extends FlowLayout {
      */
     public class DragItemManager {
 
-        DragAdapter getDragAdapter() {
-            return mCallback.getDragAdapter();
-        }
+
 
         /** get the item count
          * @return the item count  */
