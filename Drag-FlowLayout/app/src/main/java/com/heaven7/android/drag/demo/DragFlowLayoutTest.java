@@ -2,15 +2,14 @@ package com.heaven7.android.drag.demo;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
 import com.heaven7.android.BaseActivity;
+import com.heaven7.android.dragflowlayout.ClickToDeleteItemListenerImpl;
 import com.heaven7.android.dragflowlayout.DragAdapter;
 import com.heaven7.android.dragflowlayout.DragFlowLayout;
 import com.heaven7.android.dragflowlayout.IDraggable;
-import com.heaven7.android.dragflowlayout.ViewUtils;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -32,7 +31,7 @@ public class DragFlowLayoutTest extends BaseActivity {
     @Override
     protected void initView() {
        // mDragflowLayout.setLayoutTransition();
-        mDragflowLayout.setOnItemClickListener(new DragFlowLayout.OnItemClickListener() {
+       /* mDragflowLayout.setOnItemClickListener(new DragFlowLayout.OnItemClickListener() {
             @Override
             public boolean performClick(DragFlowLayout dragFlowLayout, View child,
                                         MotionEvent event, int dragState) {
@@ -46,8 +45,9 @@ public class DragFlowLayoutTest extends BaseActivity {
                 //点击事件
                 return performed;
             }
-        });
+        });*/
 
+        mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close));
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
             @Override
             public int getItemLayoutId() {
