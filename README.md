@@ -32,6 +32,27 @@ this is a draggable flow layout lib.
  //预存指定个数的Item. 这些Item会反复使用
  mDragflowLayout.prepareItemsByCount(10);
 ```
+- 6, 1.5.0 新增 拖拽状态监听器 和 view观察者。
+```java
+        //设置拖拽状态监听器
+        mDragflowLayout.setOnDragStateChangeListener(new DragFlowLayout.OnDragStateChangeListener() {
+            @Override
+            public void onDragStateChange(DragFlowLayout dfl, int dragState) {
+                System.out.println("on drag state change : dragState = " + dragState);
+            }
+        });
+        //添加view观察者
+        mDragflowLayout.addViewObserver(new IViewObserver() {
+            @Override
+            public void onAddView(View child, int index) {
+                Logger.i(TAG, "onAddView", "index = " + index);
+            }
+            @Override
+            public void onRemoveView(View child, int index) {
+                Logger.i(TAG, "onRemoveView", "index = " + index);
+            }
+        });
+```
  
 ## 使用步骤
 - 1, 导入下面的gradle 配置。
