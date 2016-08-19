@@ -10,6 +10,8 @@ import com.heaven7.android.dragflowlayout.ClickToDeleteItemListenerImpl;
 import com.heaven7.android.dragflowlayout.DragAdapter;
 import com.heaven7.android.dragflowlayout.DragFlowLayout;
 import com.heaven7.android.dragflowlayout.IDraggable;
+import com.heaven7.android.dragflowlayout.IViewObserver;
+import com.heaven7.core.util.Logger;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -18,6 +20,8 @@ import butterknife.OnClick;
  * Created by heaven7 on 2016/8/1.
  */
 public class DragFlowLayoutTest extends BaseActivity {
+
+    private static final String TAG = "DragFlowLayoutTest";
 
     @InjectView(R.id.drag_flowLayout)
     DragFlowLayout mDragflowLayout;
@@ -46,7 +50,6 @@ public class DragFlowLayoutTest extends BaseActivity {
                 return performed;
             }
         });*/
-
         mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close));
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
             @Override
@@ -72,6 +75,24 @@ public class DragFlowLayoutTest extends BaseActivity {
         });
         //预存指定个数的Item. 这些Item会反复使用
         mDragflowLayout.prepareItemsByCount(10);
+        //设置拖拽状态监听器
+        mDragflowLayout.setOnDragStateChangeListener(new DragFlowLayout.OnDragStateChangeListener() {
+            @Override
+            public void onDragStateChange(DragFlowLayout dfl, int dragState) {
+                System.out.println("on drag state change : dragState = " + dragState);
+            }
+        });
+        //添加view观察者
+        mDragflowLayout.addViewObserver(new IViewObserver() {
+            @Override
+            public void onAddView(View child, int index) {
+                Logger.i(TAG, "onAddView", "index = " + index);
+            }
+            @Override
+            public void onRemoveView(View child, int index) {
+                Logger.i(TAG, "onRemoveView", "index = " + index);
+            }
+        });
     }
 
     @Override

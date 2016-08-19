@@ -12,7 +12,7 @@ import com.heaven7.memory.util.Cacher;
  * @param <T> the data may implements {@link IDraggable}
  * Created by heaven7 on 2016/8/7.
  */
-/*public*/ class DefaultDragCallback<T> extends DragFlowLayout.Callback implements IViewManagerListener {
+/*public*/ class DefaultDragCallback<T> extends DragFlowLayout.Callback implements IViewObserver {
 
     private final DragAdapter<T> mAdapter;
     private final Cacher<View,Void> mCacher = new Cacher<View, Void>() {
@@ -62,7 +62,7 @@ import com.heaven7.memory.util.Cacher;
     }
 
     @Override
-    public void onAddView(View child, int index, ViewGroup.LayoutParams params) {
+    public void onAddView(View child, int index) {
 
     }
     @Override

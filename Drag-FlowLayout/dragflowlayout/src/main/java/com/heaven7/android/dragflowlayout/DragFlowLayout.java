@@ -30,7 +30,7 @@ public class DragFlowLayout extends FlowLayout {
     private static final String TAG = "DragGridLayout";
     /*private*/ static final Debugger sDebugger = new Debugger(TAG);
 
-    private static final int INVALID_INDXE = -1;
+    public static final int INVALID_INDXE = -1;
 
     /** indicate currrent is idle, and can't draggable  */
     public static final int DRAG_STATE_IDLE       = 1;
@@ -61,6 +61,7 @@ public class DragFlowLayout extends FlowLayout {
     private DragItemManager mDragManager;
     private DefaultDragCallback mCallback;
     private OnItemClickListener mClickListener;
+    private OnDragStateChangeListener mDragStateListener;
 
     /** indicate whether dispatch the event to the alert window or not. */
     private boolean mDispatchToAlertWindow;
@@ -87,6 +88,18 @@ public class DragFlowLayout extends FlowLayout {
             return processOverlap(view);
         }
     };
+
+    /**
+     * the drag state change listener
+     */
+    public interface OnDragStateChangeListener{
+        /**
+         * callen when drag state changed
+         * @param dfl  the DragFlowLayout
+         * @param dragState the drag state
+         */
+        void onDragStateChange(DragFlowLayout dfl, int dragState);
+    }
 
     public interface OnItemClickListener {
         /**
@@ -203,8 +216,11 @@ public class DragFlowLayout extends FlowLayout {
         if(adapter == null){
             throw new NullPointerException();
         }
+        if(mCallback!=null){
+            this.mItemManager.removeViewObserver(mCallback);
+        }
         this.mCallback = new DefaultDragCallback<T>(this, adapter);
-        this.mItemManager.attachViewManagerListener(mCallback);
+        this.mItemManager.addViewObserver(mCallback);
     }
 
     /**
@@ -218,6 +234,21 @@ public class DragFlowLayout extends FlowLayout {
         return mDragManager;
     }
 
+    /**
+     *  add a view observer
+     * @param observer the  view observer
+     */
+    public void  addViewObserver(IViewObserver observer){
+        mItemManager.addViewObserver(observer);
+    }
+
+    /**
+     * set the drag state change listener.
+     * @param l the listener
+     */
+    public void setOnDragStateChangeListener(OnDragStateChangeListener l){
+        this.mDragStateListener = l;
+    }
     /**
      *  get the drag adapter
      * @return the DragAdapter
@@ -241,6 +272,9 @@ public class DragFlowLayout extends FlowLayout {
      * @param showChildren if show all direct children of DragFlowLayout
      */
     private void setDragState(@DragState int dragState, boolean showChildren){
+        if(this.mDragState == dragState){
+            return;
+        }
         checkCallback();
         this.mDragState = dragState;
         final Callback mCallback = this.mCallback;
@@ -257,8 +291,17 @@ public class DragFlowLayout extends FlowLayout {
     /** tag finish the drag state */
     public void finishDrag(){
         setDragState(DragFlowLayout.DRAG_STATE_IDLE, true);
+        dipatchDragStateChangeListener(DragFlowLayout.DRAG_STATE_IDLE);
     }
 
+   /*
+     * begin drag
+     * @param child the child to drag
+     *//*
+    public void beginDrag(View child){
+        beginDragImpl(child);
+    }
+*/
     private void checkForRelease(){
         if(mCheckForRelease == null){
             mCheckForRelease = new CheckForRelease();
@@ -284,6 +327,13 @@ public class DragFlowLayout extends FlowLayout {
         mWindomHelper.showView(mCallback.createWindowView(childView, mDragState), mTempLocation[0],
                 mTempLocation[1], true, mWindowCallback);
         mDragState = DRAG_STATE_DRAGGING;
+        dipatchDragStateChangeListener(DRAG_STATE_DRAGGING);
+    }
+
+    private void dipatchDragStateChangeListener(int dragState) {
+        if(mDragStateListener!=null){
+            mDragStateListener.onDragStateChange(this, dragState);
+        }
     }
 
     /**
@@ -341,6 +391,7 @@ public class DragFlowLayout extends FlowLayout {
         mDispatchToAlertWindow = false;
         mTouchChild = null;
         mDragState = DRAG_STATE_DRAGGABLE;
+        dipatchDragStateChangeListener(DRAG_STATE_DRAGGABLE);
     }
 
     private void checkCallback() {
@@ -493,10 +544,14 @@ public class DragFlowLayout extends FlowLayout {
         final List<Item> mItems = new ArrayList<>();
         /** 对应的拖拽item */
         Item mDragItem = null;
-        IViewManagerListener mListener;
+        List<IViewObserver> mListeners = new ArrayList<>();
 
-        public void attachViewManagerListener(IViewManagerListener l){
-            this.mListener = l;
+        public void addViewObserver(IViewObserver l){
+            this.mListeners.add(l);
+        }
+
+        public void removeViewObserver(IViewObserver l){
+            this.mListeners.remove(l);
         }
 
         public void onAddView(View child, int index, LayoutParams params) {
@@ -516,8 +571,17 @@ public class DragFlowLayout extends FlowLayout {
             mItems.add(item);
             Collections.sort(mItems, sComparator);
             //debugWhenDebug("onAddView",mItems.toString());
-            if(mListener !=null){
-                mListener.onAddView(child,index,params);
+            dispatchViewAdd(child, index);
+        }
+
+        private void dispatchViewAdd(View child, int index) {
+            for (IViewObserver observer : mListeners){
+                observer.onAddView(child,index);
+            }
+        }
+        private void dispatchViewRemove(View child, int index) {
+            for (IViewObserver observer : mListeners){
+                observer.onRemoveView(child, index);
             }
         }
 
@@ -533,9 +597,7 @@ public class DragFlowLayout extends FlowLayout {
             mItems.remove(index);
             Collections.sort(mItems, sComparator);
            // debugWhenDebug("onAddView",mItems.toString());
-            if(mListener !=null && item!=null){
-                mListener.onRemoveView(item.view, index);
-            }
+            dispatchViewRemove(item.view, index);
         }
 
         public void onRemoveView(View view) {
@@ -562,15 +624,12 @@ public class DragFlowLayout extends FlowLayout {
             mItems.remove(targetIndex);
             Collections.sort(mItems, sComparator);
             //debugWhenDebug("onAddView",mItems.toString());
-            if(mListener !=null){
-                mListener.onRemoveView(view, targetIndex);
-            }
+            dispatchViewRemove(view, targetIndex);
         }
         public void onRemoveAllViews() {
-            if(mListener !=null){
-                IViewManagerListener mViewManager = this.mListener;
+            if(mListeners.size() > 0 ){
                 for (int size = mItems.size(), i = size - 1; i >= 0; i--) {
-                    mViewManager.onRemoveView(mItems.get(i).view, i);
+                    dispatchViewRemove(mItems.get(i).view, i);
                 }
             }
             mItems.clear();
@@ -633,11 +692,10 @@ public class DragFlowLayout extends FlowLayout {
     }
 
     /**
-     * the drag item manager
+     * the drag item manager,
      */
+   // @Deprecated <p> use {@link com.heaven7.android.dragflowlayout.DragItemManager} instead</p>
     public class DragItemManager {
-
-
 
         /** get the item count
          * @return the item count  */
@@ -757,6 +815,10 @@ public class DragFlowLayout extends FlowLayout {
                 removeViewAt(index);
             }
         }
+        public <T> void replaceAll(List<T> list){
+            DragFlowLayout.this.removeAllViews();
+            addItems(list);
+        }
         /**
          * update item by index and new data.
          * @param index the index
@@ -784,7 +846,7 @@ public class DragFlowLayout extends FlowLayout {
                 }
             }
             if (view != null) {
-                getDragAdapter().onBindData(view,getDragState(),newData);
+                adapter.onBindData(view,getDragState(),newData);
             }
         }
     }
