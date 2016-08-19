@@ -32,6 +32,27 @@ this is a draggable flow layout lib.
  //预存指定个数的Item. 这些Item会反复使用
  mDragflowLayout.prepareItemsByCount(10);
 ```
+- 6, 1.5.0 新增 拖拽状态监听器 和 view观察者。
+```java
+        //设置拖拽状态监听器
+        mDragflowLayout.setOnDragStateChangeListener(new DragFlowLayout.OnDragStateChangeListener() {
+            @Override
+            public void onDragStateChange(DragFlowLayout dfl, int dragState) {
+                System.out.println("on drag state change : dragState = " + dragState);
+            }
+        });
+        //添加view观察者
+        mDragflowLayout.addViewObserver(new IViewObserver() {
+            @Override
+            public void onAddView(View child, int index) {
+                Logger.i(TAG, "onAddView", "index = " + index);
+            }
+            @Override
+            public void onRemoveView(View child, int index) {
+                Logger.i(TAG, "onRemoveView", "index = " + index);
+            }
+        });
+```
  
 ## 使用步骤
 - 1, 导入下面的gradle 配置。
@@ -100,8 +121,13 @@ this is a draggable flow layout lib.
 
 ## Gradle Config
 ```java
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.0.6'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.0'
 ```
+
+## 版本更新日志。
+1, version(1.5.0)
+   * （1）, 增加拖拽状态监听器 和 child view观察者
+ 
 ## 一些思想
    * 1 ，最开始我打算用DragHelper做的。但是发现不能将child 渲染在最上面。比较蛋疼。
    * 2, RecyclerView的自定义LayoutManager + onItem touch / 应该也可以.
