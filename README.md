@@ -121,8 +121,13 @@ this is a draggable flow layout lib.
 
 ## Gradle Config
 ```java
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.0.6'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.0'
 ```
+
+## 版本更新日志。
+1, version(1.5.0)
+   * （1）, 增加拖拽状态监听器 和 child view观察者
+ 
 ## 一些思想
    * 1 ，最开始我打算用DragHelper做的。但是发现不能将child 渲染在最上面。比较蛋疼。
    * 2, RecyclerView的自定义LayoutManager + onItem touch / 应该也可以.
