@@ -96,7 +96,7 @@ public class DragFlowLayout extends FlowLayout {
         /**
          * callen when drag state changed
          * @param dfl  the DragFlowLayout
-         * @param dragState the drag state
+         * @param dragState the drag state, see {@link DragFlowLayout#DRAG_STATE_DRAGGING} and etc.
          */
         void onDragStateChange(DragFlowLayout dfl, int dragState);
     }
