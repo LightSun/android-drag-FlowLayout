@@ -777,6 +777,16 @@ public class DragFlowLayout extends FlowLayout {
 
         /**
          * add a item to the DragFlowLayout
+         * @param data  the data
+         */
+        public void addItem(Object data) {
+            final DragAdapter mAdapter = getDragAdapter();
+            final View view = mCallback.obtainItemView();
+            mAdapter.onBindData(view, getDragState(), data);
+            addView(view);
+        }
+        /**
+         * add a item to the DragFlowLayout
          * @param index the index , can be -1 if add last.
          * @param data  the data
          */
