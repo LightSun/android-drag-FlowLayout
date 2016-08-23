@@ -837,6 +837,10 @@ public class DragFlowLayout extends FlowLayout {
             DragFlowLayout.this.removeAllViews();
             addItems(list);
         }
+
+        public void clearItems(){
+            DragFlowLayout.this.removeAllViews();
+        }
         /**
          * update item by index and new data.
          * @param index the index
