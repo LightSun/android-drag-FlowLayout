@@ -733,7 +733,7 @@ public class DragFlowLayout extends FlowLayout {
          */
         public void addItems(Object...datas){
             for(int i=0,size = datas.length ;i<size ; i++){
-                addItem(i, datas[i]);
+                addItem(datas[i]);
             }
         }
         /**
