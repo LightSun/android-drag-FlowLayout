@@ -26,7 +26,7 @@ this is a draggable flow layout lib.
         });
 ```
  - 3，可嵌套ScrollerView.  demo就是。
- - 4, 如果想禁止某些Item拖拽请实现 {@link IDraggable} 接口 .
+ - 4, 默认均可拖拽，如果想禁止某些Item拖拽请实现 {@link IDraggable} 接口 .
  - 5, 支持预存储一定个数的item. 
 ```java
  //预存指定个数的Item. 这些Item会反复使用
@@ -87,7 +87,7 @@ this is a draggable flow layout lib.
 
                 TextView tv = (TextView) itemView.findViewById(R.id.tv_text);
                 tv.setText(data.text);
-                //iv_close是关闭按钮。只有再非拖拽空闲的情况吓才显示
+                //iv_close是关闭按钮。只有再非拖拽空闲的情况下才显示
                 itemView.findViewById(R.id.iv_close).setVisibility(
                         dragState!= DragFlowLayout.DRAG_STATE_IDLE
                         && data.draggable ? View.VISIBLE : View.INVISIBLE);
@@ -129,7 +129,7 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.0'
    * （1）, 增加拖拽状态监听器 和 child view观察者
  
 ## 一些思想
-   * 1 ，最开始我打算用DragHelper做的。但是发现不能将child 渲染在最上面。比较蛋疼。
+   * 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
    * 2, RecyclerView的自定义LayoutManager + onItem touch / 应该也可以.
 
 ## 计划
