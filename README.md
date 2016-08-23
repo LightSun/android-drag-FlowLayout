@@ -121,12 +121,14 @@ this is a draggable flow layout lib.
 
 ## Gradle Config
 ```java
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.0'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.1'
 ```
 
 ## 版本更新日志。
 1, version(1.5.0)
    * （1）, 增加拖拽状态监听器 和 child view观察者
+2, version(1.5.1)
+   * （1）, reuse item view for DragItemManager(inner class)
  
 ## 一些思想
    * 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
