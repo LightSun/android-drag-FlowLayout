@@ -8,6 +8,7 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
@@ -229,7 +230,7 @@ public class DragFlowLayout extends FlowLayout {
      */
     public DragItemManager getDragItemManager(){
         if(mDragManager == null){
-            mDragManager = new DragItemManager();
+            mDragManager = new DragItemManager(getContext());
         }
         return mDragManager;
     }
@@ -697,6 +698,13 @@ public class DragFlowLayout extends FlowLayout {
    // @Deprecated <p> use {@link com.heaven7.android.dragflowlayout.DragItemManager} instead</p>
     public class DragItemManager {
 
+
+        private final LayoutInflater mInflater;
+
+        public DragItemManager(Context context) {
+            mInflater = LayoutInflater.from(context);
+        }
+
         /** get the item count
          * @return the item count  */
         public int getItemCount(){
@@ -777,7 +785,7 @@ public class DragFlowLayout extends FlowLayout {
                 throw new IllegalArgumentException("index can't < -1.");
             }
             final DragAdapter mAdapter = getDragAdapter();
-            final View view = View.inflate(getContext(), mAdapter.getItemLayoutId(), null);
+            final View view = mCallback.obtainItemView();
             mAdapter.onBindData(view, getDragState(), data);
             addView(view, index);
         }

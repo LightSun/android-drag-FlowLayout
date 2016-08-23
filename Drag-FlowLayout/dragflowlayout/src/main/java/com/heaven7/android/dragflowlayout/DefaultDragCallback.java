@@ -74,4 +74,8 @@ import com.heaven7.memory.util.Cacher;
         mCacher.setMaxPoolSize(count);
         mCacher.prepare();
     }
+
+    public View obtainItemView() {
+        return mCacher.obtain();
+    }
 }
