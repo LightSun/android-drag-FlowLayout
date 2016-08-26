@@ -24,6 +24,13 @@ this is a draggable flow layout lib.
                 return performed;
             }
         });
+        //或者
+        mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
+            @Override
+            protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
+               //your code
+            }
+        });
 ```
  - 3，可嵌套ScrollerView.  demo就是。
  - 4, 默认均可拖拽，如果想禁止某些Item拖拽请实现 {@link IDraggable} 接口 .
@@ -75,6 +82,13 @@ this is a draggable flow layout lib.
                 return performed;
             }
         });
+        //或者用这个处理点击事件
+        mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
+            @Override
+            protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
+               //your code
+            }
+        });
 
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
             @Override
@@ -121,14 +135,25 @@ this is a draggable flow layout lib.
 
 ## Gradle Config
 ```java
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.4'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.6'
 ```
 
 ## 版本更新日志。
-1, version(1.5.0)
-   * （1）, 增加拖拽状态监听器 和 child view观察者
-2, version(1.5.1)
-   * （1）, reuse item view for DragItemManager(inner class)
+- 1, version(1.5.0)
+   * （1) , 增加拖拽状态监听器 和 child view观察者
+- 2, version(1.5.1)
+   * （1) , reuse item view for DragItemManager(inner class)
+- 3, version(1.5.5)
+   * （1) , fix reuse item view bug.
+   *  (2) , add method onDeleteSuccess(...) for ClickToDeleteItemListenerImpl
+```java
+  mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
+            @Override
+            protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
+               //your code
+            }
+        });
+```
  
 ## 一些思想
    * 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
