@@ -82,6 +82,13 @@ this is a draggable flow layout lib.
                 return performed;
             }
         });
+        //或者用这个处理点击事件
+        mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
+            @Override
+            protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
+               //your code
+            }
+        });
 
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
             @Override
