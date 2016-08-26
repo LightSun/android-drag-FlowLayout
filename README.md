@@ -129,6 +129,17 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.5'
    * （1）, 增加拖拽状态监听器 和 child view观察者
 2, version(1.5.1)
    * （1）, reuse item view for DragItemManager(inner class)
+2, version(1.5.5)
+   * （1）, fix reuse item view bug.
+   *  (2) , add method onDeleteSuccess(...) for ClickToDeleteItemListenerImpl
+```java
+  mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
+            @Override
+            protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
+               //your code
+            }
+        });
+```
  
 ## 一些思想
    * 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
