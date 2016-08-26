@@ -47,7 +47,7 @@ import com.heaven7.memory.util.Cacher;
     @Override
     public View createChildView(View child, int index, int dragState) {
         View view = mCacher.obtain();
-        removeFromParent(view);
+       // removeFromParent(view);
         mAdapter.onBindData(view, dragState , mAdapter.getData(child));
         return view;
     }
@@ -69,7 +69,7 @@ import com.heaven7.memory.util.Cacher;
     }
     @Override
     public void onRemoveView(View child, int index) {
-        removeFromParent(child);
+        //removeFromParent(child);
          mCacher.recycle(child);
     }
 
