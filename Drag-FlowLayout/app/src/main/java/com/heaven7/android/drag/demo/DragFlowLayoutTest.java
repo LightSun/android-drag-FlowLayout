@@ -50,7 +50,12 @@ public class DragFlowLayoutTest extends BaseActivity {
                 return performed;
             }
         });*/
-        mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close));
+        mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
+            @Override
+            protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
+                super.onDeleteSuccess(dfl, child, data);
+            }
+        });
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
             @Override
             public int getItemLayoutId() {

@@ -17,6 +17,14 @@
         </activity>
 
         <activity android:name=".DragFlowLayoutTest"/>
+
+      <!--  <receiver android:name="com.heaven7.android.receive.NetstateChangeReceiver">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+            </intent-filter>
+        </receiver>
+        <service android:name="com.heaven7.android.service.SimpleService" android:process=":heaven7"
+            />-->
     </application>
 
 </manifest>

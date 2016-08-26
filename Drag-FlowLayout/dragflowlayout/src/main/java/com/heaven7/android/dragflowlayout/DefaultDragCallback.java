@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewParent;
 
 import com.heaven7.memory.util.Cacher;
 
@@ -67,6 +68,10 @@ import com.heaven7.memory.util.Cacher;
     }
     @Override
     public void onRemoveView(View child, int index) {
+        final ViewParent parent = child.getParent();
+        if(parent !=null && parent instanceof ViewGroup){
+            ((ViewGroup) parent).removeView(child);
+        }
          mCacher.recycle(child);
     }
 

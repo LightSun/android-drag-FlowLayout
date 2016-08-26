@@ -27,8 +27,35 @@ public class ClickToDeleteItemListenerImpl implements DragFlowLayout.OnItemClick
         boolean performed = dragState != DragFlowLayout.DRAG_STATE_IDLE && ViewUtils.isViewUnderInScreen(child.findViewById(mDeleteViewId),
                 (int) event.getRawX(),(int) event.getRawY());
         if(performed){
-            dragFlowLayout.removeView(child);
+            dragFlowLayout.postDelayed(new DeleteRunnable(dragFlowLayout,child), 60);
         }
         return performed;
+    }
+
+    /**
+     * called when delete success
+     * @param dfl the DragFlowLayout
+     * @param child the direct child of DragFlowLayout
+     * @param data the data from child
+     */
+    protected  void onDeleteSuccess(DragFlowLayout dfl, View child, Object data){
+
+    }
+
+    private class DeleteRunnable implements Runnable{
+        private final DragFlowLayout mParent;
+        private final View mChild;
+
+        public DeleteRunnable(DragFlowLayout mParent, View mChild) {
+            this.mParent = mParent;
+            this.mChild = mChild;
+        }
+
+        @Override
+        public void run() {
+            Object data = mParent.getDragAdapter().getData(mChild);
+            mParent.removeView(mChild);
+            onDeleteSuccess(mParent, mChild, data);
+        }
     }
 }
