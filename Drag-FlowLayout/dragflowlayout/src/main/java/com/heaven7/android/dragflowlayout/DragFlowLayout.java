@@ -447,9 +447,12 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
     }
     private void checkIfAutoReleaseDrag() {
         if(getChildCount() == 0){
+            final int oldState = this.mDragState;
             releaseDragInternal(false);
             mDragState = DRAG_STATE_IDLE;
-            dispatchDragStateChange(DRAG_STATE_IDLE);
+            if(oldState != DRAG_STATE_IDLE){
+                dispatchDragStateChange(DRAG_STATE_IDLE);
+            }
         }
     }
 
