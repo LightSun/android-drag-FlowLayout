@@ -135,7 +135,11 @@ this is a draggable flow layout lib.
 
 ## Gradle Config
 ```java
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.5.8'
+repositories {
+        jcenter()
+}
+
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.0'
 ```
 
 ## 版本更新日志。
