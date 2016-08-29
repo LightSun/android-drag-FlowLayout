@@ -20,9 +20,27 @@ import com.heaven7.memory.util.Cacher;
         @Override
         public View create(Void aVoid) {
             DragFlowLayout.sDebugger.d("createItemView","---------------");
-            ViewGroup parent = getDragFlowLauout();
+            ViewGroup parent = getDragFlowLayout();
             return LayoutInflater.from(parent.getContext()).inflate(mAdapter.getItemLayoutId(),
                     parent, false);
+        }
+
+        @Override
+        public View obtain() {
+            //DragFlowLayout.sDebugger.d("obtain","current size = " + getCurrentPoolSize());
+            final View view = super.obtain();
+           // DragFlowLayout.sDebugger.d("obtain","parent = " + view.getParent());
+            if(view.getParent() != null){
+                return obtain();
+            }
+            return view;
+        }
+
+        @Override
+        protected void onRecycleSuccess(View view) {
+            removeFromParent(view);
+            DragFlowLayout.sDebugger.d("onRecycleSuccess","parent = " + view.getParent()
+                    + " ,child count = " + getDragFlowLayout().getChildCount());
         }
     };
 
@@ -76,7 +94,17 @@ import com.heaven7.memory.util.Cacher;
     private void removeFromParent(View child) {
         final ViewParent parent = child.getParent();
         if(parent !=null && parent instanceof ViewGroup){
+            IViewObserverManager vom = null;
+            if(parent instanceof IViewObserverManager){
+                vom = (IViewObserverManager) parent;
+            }
+            if(vom!=null){
+                vom.enableViewObserver(false);
+            }
             ((ViewGroup) parent).removeView(child);
+            if(vom!=null){
+                vom.enableViewObserver(true);
+            }
         }
     }
 

@@ -14,7 +14,7 @@ import android.view.WindowManager;
 public class AlertWindowHelper {
 
     private static final String TAG = "AlertWindowHelper";
-    private static final Debugger sDebugger = new Debugger(TAG);
+    private static final Debugger sDebugger = new Debugger(TAG,false);
 
     private final WindowManager mWm;
     private final WindowManager.LayoutParams mParams;
