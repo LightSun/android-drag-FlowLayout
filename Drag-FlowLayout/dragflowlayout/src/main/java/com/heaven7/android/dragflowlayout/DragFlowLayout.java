@@ -81,7 +81,7 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         @Override
         public void onCancel(View view, MotionEvent event) {
             sDebugger.i("onCancel","------------->");
-            releaseDragInternal();
+            releaseDragInternal(true);
         }
         @Override
         public boolean onMove(View view, MotionEvent event) {
@@ -298,7 +298,7 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
     /** tag finish the drag state */
     public void finishDrag(){
         setDragState(DragFlowLayout.DRAG_STATE_IDLE, true);
-        dipatchDragStateChangeListener(DragFlowLayout.DRAG_STATE_IDLE);
+        dispatchDragStateChange(DragFlowLayout.DRAG_STATE_IDLE);
     }
 
    /*
@@ -335,10 +335,10 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         mWindomHelper.showView(mCallback.createWindowView(childView, mDragState), mTempLocation[0],
                 mTempLocation[1], true, mWindowCallback);
         mDragState = DRAG_STATE_DRAGGING;
-        dipatchDragStateChangeListener(DRAG_STATE_DRAGGING);
+        dispatchDragStateChange(DRAG_STATE_DRAGGING);
     }
 
-    private void dipatchDragStateChangeListener(int dragState) {
+    private void dispatchDragStateChange(int dragState) {
         if(mDragStateListener!=null){
             mDragStateListener.onDragStateChange(this, dragState);
         }
@@ -389,7 +389,7 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         return found;
     }
 
-    private void releaseDragInternal(){
+    private void releaseDragInternal(boolean notifyDragStateChange){
         checkCallback();
         if(mItemManager.mDragItem!=null) {
             mItemManager.mDragItem.view.setVisibility(View.VISIBLE);
@@ -399,7 +399,10 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         mDispatchToAlertWindow = false;
         mTouchChild = null;
         mDragState = DRAG_STATE_DRAGGABLE;
-        dipatchDragStateChangeListener(DRAG_STATE_DRAGGABLE);
+        if(notifyDragStateChange){
+             dispatchDragStateChange(DRAG_STATE_DRAGGABLE);
+        }
+
     }
 
     private void checkCallback() {
@@ -443,9 +446,10 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
                 && y >= viewY && y < viewY + h;
     }
     private void checkIfAutoReleaseDrag() {
-        if(getChildCount()==0){
-            releaseDragInternal();
+        if(getChildCount() == 0){
+            releaseDragInternal(false);
             mDragState = DRAG_STATE_IDLE;
+            dispatchDragStateChange(DRAG_STATE_IDLE);
         }
     }
 
@@ -539,7 +543,7 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         @Override
         public void run() {
             if(mCancelled) {
-                releaseDragInternal();
+                releaseDragInternal(true);
             }
         }
     }
