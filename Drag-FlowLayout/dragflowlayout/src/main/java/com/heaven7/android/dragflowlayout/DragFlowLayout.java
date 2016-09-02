@@ -8,7 +8,6 @@ import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
@@ -29,7 +28,9 @@ import java.util.Locale;
 public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
 
     private static final String TAG = "DragGridLayout";
-    /*private*/ static final Debugger sDebugger = new Debugger(TAG,true);
+    private static final boolean DEBUG = true;
+
+    /*private*/ static final Debugger sDebugger = new Debugger(TAG, DEBUG);
 
     public static final int INVALID_INDXE = -1;
 
@@ -236,7 +237,7 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
      */
     public DragItemManager getDragItemManager(){
         if(mDragManager == null){
-            mDragManager = new DragItemManager(getContext());
+            mDragManager = new DragItemManager();
         }
         return mDragManager;
     }
@@ -508,19 +509,14 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        return super.onInterceptTouchEvent(ev);
-    }
-
-    @Override
     public boolean onTouchEvent(MotionEvent event) {
-        sDebugger.i("onTouchEvent", event.toString());
+        //sDebugger.i("onTouchEvent", event.toString());
         //sDebugger.i("onTouchEvent", "------> mDispatchToAlertWindow = " + mDispatchToAlertWindow +" ,mIsDragState = " + mIsDragState);
         mCancelled = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
         final boolean handled = mGestureDetector.onTouchEvent(event);
         //解决ScrollView嵌套DragFlowLayout时，引起的事件冲突
         if(getParent()!=null){
-            getParent().requestDisallowInterceptTouchEvent(mDispatchToAlertWindow && mTouchChild != null );
+            getParent().requestDisallowInterceptTouchEvent(true);
         }
         if(mDispatchToAlertWindow){
             mWindomHelper.getView().dispatchTouchEvent(event);
@@ -682,6 +678,12 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
                     checkForDrag(130, false);
                 }
             }
+            if(DEBUG) {
+                if (mTouchChild != null) {
+                    mTouchChild.getLocationOnScreen(mTempLocation);
+                    sDebugger.w("onDown", " x = " + mTempLocation[0] +" ,y = " +mTempLocation[1]);
+                }
+            }
             return mTouchChild != null;
         }
         @Override
@@ -693,7 +695,7 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
             //处理点击时，看起来有点怪异的感觉(控件偏离了点位置)
             removeCallbacks(mCheckForDrag);
             boolean performed = mClickListener.performClick(DragFlowLayout.this, mTouchChild, e , mDragState);
-            sDebugger.i("mGestureDetector_onSingleTapUp","----------------- > performed = " + performed);
+           // sDebugger.i("mGestureDetector_onSingleTapUp","----------------- > performed = " + performed);
             if(performed){
                 playSoundEffect(SoundEffectConstants.CLICK);
             }else if (mReDrag) {
@@ -703,7 +705,7 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         }
         @Override
         public void onLongPress(MotionEvent e) {
-            sDebugger.i("mGestureDetector_onLongPress","----------------- >");
+            //sDebugger.i("mGestureDetector_onLongPress","----------------- >");
             if(mDragState!= DRAG_STATE_DRAGGING  && mTouchChild!=null
                     && mCallback.isChildDraggable( mTouchChild)) {
                 sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
@@ -719,13 +721,6 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
      */
    // @Deprecated <p> use {@link com.heaven7.android.dragflowlayout.DragItemManager} instead</p>
     public class DragItemManager {
-
-
-        private final LayoutInflater mInflater;
-
-        public DragItemManager(Context context) {
-            mInflater = LayoutInflater.from(context);
-        }
 
         /** get the item count
          * @return the item count  */

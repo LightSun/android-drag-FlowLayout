@@ -82,6 +82,7 @@ public class AlertWindowHelper {
         if(useInternalDrag){
             view.setOnTouchListener(new DragTouchListener());
         }
+        sDebugger.w("showView", "initLeft = " + "initLeft , initTop = " + initTop);
         mParams.x = initLeft;
         mParams.y = initTop;
         mWm.addView(view, mParams);
