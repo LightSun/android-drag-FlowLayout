@@ -130,10 +130,10 @@ this is a draggable flow layout lib.
                 即可得到DragItemManager.
 - 4, 禁止个别Item拖拽。
 ```java
-//数据实体实现IDraggable 接口，并且 isDraggable 为false即可
+//数据实体实现IDraggable (是否可拖拽) 接口，并且 isDraggable 为false即可
  private static class  TestBean implements IDraggable{
         String text;
-        boolean draggable = true;
+        boolean draggable = true; 
         public TestBean(String text) {
             this.text = text;
         }
