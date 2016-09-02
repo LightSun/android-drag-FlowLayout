@@ -62,7 +62,14 @@ this is a draggable flow layout lib.
 ```
  
 ## 使用步骤
-- 1, 导入下面的gradle 配置。
+- 1, 导入下面的gradle 配置。并在xml中添加配置
+```java
+ <com.heaven7.android.dragflowlayout.DragFlowLayout
+                android:id="@+id/drag_flowLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+    </com.heaven7.android.dragflowlayout.DragFlowLayout>
+```
 - 2，设置点击事件处理器 和 数据适配器.
 ```java
   mDragflowLayout.setOnItemClickListener(new DragFlowLayout.OnItemClickListener() {
@@ -89,12 +96,15 @@ this is a draggable flow layout lib.
                //your code
             }
         });
-
+        
+        //DragAdapter 泛型参数就是为了每个Item绑定一个对应的数据。通常很可能是json转化过来的bean对象
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
-            @Override
+        
+            @Override  //获取你的item布局Id
             public int getItemLayoutId() {
                 return R.layout.item_drag_flow;
             }
+            //绑定对应item的数据
             @Override
             public void onBindData(View itemView, int dragState, TestBean data) {
                 itemView.setTag(data);
@@ -106,6 +116,7 @@ this is a draggable flow layout lib.
                         dragState!= DragFlowLayout.DRAG_STATE_IDLE
                         && data.draggable ? View.VISIBLE : View.INVISIBLE);
             }
+            //根据指定的child获取对应的数据。
             @NonNull
             @Override
             public TestBean getData(View itemView) {
