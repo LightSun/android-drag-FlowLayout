@@ -26,6 +26,8 @@ this is a draggable flow layout lib.
         });
         //或者
         mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
+        
+             //点击删除成功时回调
             @Override
             protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
                //your code
