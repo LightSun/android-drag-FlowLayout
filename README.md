@@ -4,7 +4,7 @@ this is a draggable flow layout lib (android 可拖拽的流布局库) .
  <img src="/art/drag_flowlayout.gif" alt="Demo Screen Capture" width="296px" height="581px" />
  
 
- [Sample apk/示例程序](https://github.com/LightSun/android-drag-FlowLayout/tree/master/apk)
+ [Sample apk/示例app](https://github.com/LightSun/android-drag-FlowLayout/tree/master/apk)
  
 
 ## 特点
