@@ -2,6 +2,10 @@
 this is a draggable flow layout lib (android 可拖拽的流布局库) .
 
  <img src="/art/drag_flowlayout.gif" alt="Demo Screen Capture" width="296px" height="581px" />
+ 
+
+ [Sample apk/示例程序](https://github.com/LightSun/android-drag-FlowLayout/tree/master/apk)
+ 
 
 ## 特点
  - 1, 类似可拖拽的GridView. 不过gridView 宽度/个数是固定的。 这个布局item宽度是不定的（放不下自动换行）。
