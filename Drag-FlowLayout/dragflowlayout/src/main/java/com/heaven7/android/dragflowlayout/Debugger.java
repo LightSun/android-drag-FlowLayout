@@ -8,7 +8,7 @@ import android.util.Log;
  */
 /*public*/ class Debugger {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private final String tag;
     private final boolean debugable;
