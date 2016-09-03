@@ -16,7 +16,7 @@ import com.heaven7.core.util.Logger;
 import butterknife.InjectView;
 import butterknife.OnClick;
 
-/**
+/** 拖拽流布局 示例程序
  * Created by heaven7 on 2016/8/1.
  */
 public class DragFlowLayoutTest extends BaseActivity {

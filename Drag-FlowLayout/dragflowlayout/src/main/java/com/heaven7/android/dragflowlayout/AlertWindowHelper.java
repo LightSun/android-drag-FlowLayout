@@ -14,9 +14,6 @@ import android.view.WindowManager;
  */
 public class AlertWindowHelper {
 
-    private static final String TAG = "AlertWindowHelper";
-    private static final Debugger sDebugger = new Debugger(TAG, false);
-
     private final WindowManager mWm;
     private final WindowManager.LayoutParams mParams;
     private final float mTouchSlop;
@@ -34,6 +31,7 @@ public class AlertWindowHelper {
      * the drag event callback
      */
     public interface ICallback {
+
         void onCancel(View v, MotionEvent event);
 
         boolean onMove(View view, MotionEvent event);
@@ -110,7 +108,7 @@ public class AlertWindowHelper {
         DragFlowLayout.sDebugger.d("showView", "initLeft = " + initLeft + " ," +
                 "initTop = " + initTop);
         mParams.x = initLeft;
-        mParams.y = initTop - mStateBarHeight ;
+        mParams.y = adjustY(initTop);
         mWm.addView(view, mParams);
     }
 
@@ -126,7 +124,7 @@ public class AlertWindowHelper {
         }
         DragFlowLayout.sDebugger.d("updateViewLayout2", "dx = " + dx +" ,dy = " + dy);
         mParams.x = mInitLeft + dx;
-        mParams.y = mInitTop + dy - mStateBarHeight;
+        mParams.y = adjustY(mInitTop + dy);
         mWm.updateViewLayout(mView, mParams);
     }
 
@@ -141,7 +139,7 @@ public class AlertWindowHelper {
             throw new IllegalStateException("must call #showView first");
         }
         mParams.x = left;
-        mParams.y = top - mStateBarHeight;
+        mParams.y = adjustY(top);
         mWm.updateViewLayout(mView, mParams);
     }
 
@@ -151,6 +149,15 @@ public class AlertWindowHelper {
             mWm.removeView(mView);
             mView = null;
         }
+    }
+
+    /**
+     * adjust the y position
+     * @param top the raw top/y position
+     * @return the really y position
+     */
+    private int adjustY(int top) {
+        return top - mStateBarHeight;
     }
 
     private boolean checkTouchSlop(float dx, float dy) {

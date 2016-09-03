@@ -679,11 +679,6 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
                     mReDrag = true;
                     checkForDrag(130, false);
                 }
-                // by test .init position is the same as AlertWindowHelper.initLeft /initRight
-                if(DEBUG) {
-                    mTouchChild.getLocationOnScreen(mTempLocation);
-                    sDebugger.w("onDown_TestLocation", " x = " + mTempLocation[0] +" ,y = " +mTempLocation[1]);
-                }
             }
             return mTouchChild != null;
         }
