@@ -33,6 +33,8 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
     /*private*/ static final Debugger sDebugger = new Debugger(TAG, DEBUG);
 
     public static final int INVALID_INDXE = -1;
+    /** the delay of check click event. */
+    private static final int DELAY_CHECK_CLICK = 130;
 
     /** indicate currrent is idle, and can't draggable  */
     public static final int DRAG_STATE_IDLE       = 1;
@@ -474,7 +476,12 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
 
     @Override
     public void setOnClickListener(View.OnClickListener l) {
-        throw new UnsupportedOperationException("you should use DragFlowLayout.OnItemClickListener instead..");
+        if(mDraggable) {
+            throw new UnsupportedOperationException("you should use" +
+                    " DragFlowLayout.OnItemClickListener instead..");
+        }else{
+            super.setOnClickListener(l);
+        }
     }
 
     @Override
@@ -690,7 +697,7 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
                 if(!mDispatchToAlertWindow && mDragState != DRAG_STATE_IDLE
                         && mCallback.isChildDraggable( mTouchChild ) ) {
                     mReDrag = true;
-                    checkForDrag(130, false);
+                    checkForDrag(DELAY_CHECK_CLICK, false);
                 }
             }
             return mTouchChild != null;

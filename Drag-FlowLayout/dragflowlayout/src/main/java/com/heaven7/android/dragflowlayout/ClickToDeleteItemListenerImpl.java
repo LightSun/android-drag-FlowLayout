@@ -25,8 +25,8 @@ public class ClickToDeleteItemListenerImpl implements DragFlowLayout.OnItemClick
     @Override
     public boolean performClick(DragFlowLayout dragFlowLayout, View child, MotionEvent event, int dragState) {
         //检查是否点击了关闭按钮。点击了就删除
-        boolean performed = dragState != DragFlowLayout.DRAG_STATE_IDLE && ViewUtils.isViewUnderInScreen(child.findViewById(mDeleteViewId),
-                (int) event.getRawX(),(int) event.getRawY());
+        boolean performed = dragState != DragFlowLayout.DRAG_STATE_IDLE && ViewUtils.isViewUnderInScreen(
+                child.findViewById(mDeleteViewId), (int) event.getRawX(),(int) event.getRawY());
         if(performed){
             dragFlowLayout.postDelayed(new DeleteRunnable(dragFlowLayout,child), 60);
         }
