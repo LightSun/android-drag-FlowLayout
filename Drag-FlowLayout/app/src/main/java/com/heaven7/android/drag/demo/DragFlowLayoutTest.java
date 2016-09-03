@@ -34,26 +34,10 @@ public class DragFlowLayoutTest extends BaseActivity {
 
     @Override
     protected void initView() {
-       // mDragflowLayout.setLayoutTransition();
-       /* mDragflowLayout.setOnItemClickListener(new DragFlowLayout.OnItemClickListener() {
-            @Override
-            public boolean performClick(DragFlowLayout dragFlowLayout, View child,
-                                        MotionEvent event, int dragState) {
-                //检查是否点击了关闭按钮。点击了就删除
-                boolean performed = dragState != DragFlowLayout.DRAG_STATE_IDLE
-                        && ViewUtils.isViewUnderInScreen(child.findViewById(R.id.iv_close),
-                        (int) event.getRawX(),(int) event.getRawY());
-                if(performed){
-                    dragFlowLayout.removeView(child);
-                }
-                //点击事件
-                return performed;
-            }
-        });*/
         mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
             @Override
             protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
-                super.onDeleteSuccess(dfl, child, data);
+                //删除成功后的处理。
             }
         });
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
@@ -78,7 +62,7 @@ public class DragFlowLayoutTest extends BaseActivity {
                 return (TestBean) itemView.getTag();
             }
         });
-        //预存指定个数的Item. 这些Item会反复使用
+        //预存指定个数的Item. 这些Item view会反复使用，避免重复创建
         mDragflowLayout.prepareItemsByCount(10);
         //设置拖拽状态监听器
         mDragflowLayout.setOnDragStateChangeListener(new DragFlowLayout.OnDragStateChangeListener() {
@@ -95,7 +79,7 @@ public class DragFlowLayoutTest extends BaseActivity {
             }
             @Override
             public void onRemoveView(View child, int index) {
-                Logger.i(TAG, "onRemoveView", "index = " + index);
+               Logger.i(TAG, "onRemoveView", "index = " + index);
             }
         });
     }

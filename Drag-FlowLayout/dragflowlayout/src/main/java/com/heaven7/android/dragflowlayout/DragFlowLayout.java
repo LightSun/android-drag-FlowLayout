@@ -516,7 +516,7 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         final boolean handled = mGestureDetector.onTouchEvent(event);
         //解决ScrollView嵌套DragFlowLayout时，引起的事件冲突
         if(getParent()!=null){
-            getParent().requestDisallowInterceptTouchEvent(true);
+            getParent().requestDisallowInterceptTouchEvent(mDragState != DRAG_STATE_IDLE);
         }
         if(mDispatchToAlertWindow){
             mWindomHelper.getView().dispatchTouchEvent(event);
@@ -672,16 +672,17 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
             sDebugger.i("mGestureDetector_onDown","----------------- > after find : mTouchChild = "
                     + mTouchChild);
             mReDrag = false;
-            if(mTouchChild!=null && !mDispatchToAlertWindow && mDragState != DRAG_STATE_IDLE){
-                if(mCallback.isChildDraggable(mTouchChild)) {
+            if(mTouchChild != null ){
+                mWindomHelper.setTouchDownPosition((int) e.getRawX(),(int) e.getRawY() );
+                if(!mDispatchToAlertWindow && mDragState != DRAG_STATE_IDLE
+                        && mCallback.isChildDraggable( mTouchChild ) ) {
                     mReDrag = true;
                     checkForDrag(130, false);
                 }
-            }
-            if(DEBUG) {
-                if (mTouchChild != null) {
+                // by test .init position is the same as AlertWindowHelper.initLeft /initRight
+                if(DEBUG) {
                     mTouchChild.getLocationOnScreen(mTempLocation);
-                    sDebugger.w("onDown", " x = " + mTempLocation[0] +" ,y = " +mTempLocation[1]);
+                    sDebugger.w("onDown_TestLocation", " x = " + mTempLocation[0] +" ,y = " +mTempLocation[1]);
                 }
             }
             return mTouchChild != null;
