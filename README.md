@@ -152,7 +152,7 @@ repositories {
         jcenter()
 }
 
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.0'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.2'
 ```
 
 ## 版本更新日志。
@@ -171,6 +171,8 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.0'
             }
         });
 ```
+- 4, version(1.6.2)
+   * （1) , fix bug of issue(#1) 
  
 ## 一些思想
    * 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
