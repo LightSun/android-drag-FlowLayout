@@ -25,7 +25,7 @@ import java.util.Locale;
  * the drag flow layout: you should not use normal onclick listener for child or else may cause problem.
  * Created by heaven7 on 2016/8/1.
  */
-public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
+public class DragFlowLayout extends FlowLayout implements IViewManager {
 
     private static final String TAG = "DragGridLayout";
     private static final boolean DEBUG = true;
@@ -90,10 +90,12 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
             return processOverlap(view);
         }
     };
-    private boolean mEnableViewObserver = true;
+    /** indicate can draggable for all items */
+    private boolean mDraggable = true;
 
     /**
      * the drag state change listener
+     * if {@link DragFlowLayout #setDraggable(false)} is called, this listener will have nothing effect.
      */
     public interface OnDragStateChangeListener{
         /**
@@ -104,6 +106,10 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         void onDragStateChange(DragFlowLayout dfl, int dragState);
     }
 
+    /**
+     * the listener of on click item(child of DragFlowLayout) view of DragFlowLayout.
+     * if {@link DragFlowLayout #setDraggable(false)} is called, this listener will have nothing effect.
+     */
     public interface OnItemClickListener {
         /**
          * called when a click event occurrence ,perform the click event if you need. and return true if you performed the click event.
@@ -201,9 +207,8 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
         mGestureDetector = new GestureDetectorCompat(context, new GestureListenerImpl());
     }
 
-    @Override
-    public void enableViewObserver(boolean enable) {
-        mEnableViewObserver = enable;
+    /* package */ DefaultDragCallback getCallback(){
+        return mCallback;
     }
 
     /** get the drag state */
@@ -240,6 +245,14 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
             mDragManager = new DragItemManager();
         }
         return mDragManager;
+    }
+
+    /**
+     * set the DragFlowLayout can drag or not. default is true;
+     * @param draggable if can drag or not. false to disable drag for DragFlowLayout. default is true.
+     */
+    public void setDraggable(boolean draggable){
+        this.mDraggable = draggable;
     }
 
     /**
@@ -465,40 +478,36 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
     }
 
     @Override
+    public void removeViewWithoutNotify(View child) {
+        super.removeView(child);
+    }
+    @Override
     public void addView(View child, int index, LayoutParams params) {
         super.addView(child, index, params);
-        if(mEnableViewObserver) {
-            checkCallback();
-            mItemManager.onAddView(child, index, params);
-            mCallback.setChildByDragState(child, mDragState);
-        }
+        checkCallback();
+        mItemManager.onAddView(child, index, params);
+        mCallback.setChildByDragState(child, mDragState);
     }
 
     @Override
     public void removeViewAt(int index) {
         super.removeViewAt(index);
-        if(mEnableViewObserver) {
-            mItemManager.onRemoveViewAt(index);
-            checkIfAutoReleaseDrag();
-        }
+        mItemManager.onRemoveViewAt(index);
+        checkIfAutoReleaseDrag();
     }
 
     @Override
     public void removeView(View view) {
         super.removeView(view);
-        if(mEnableViewObserver) {
-            mItemManager.onRemoveView(view);
-            checkIfAutoReleaseDrag();
-        }
+        mItemManager.onRemoveView(view);
+        checkIfAutoReleaseDrag();
     }
 
     @Override
     public void removeAllViews() {
         super.removeAllViews();
-        if(mEnableViewObserver) {
-            mItemManager.onRemoveAllViews();
-            checkIfAutoReleaseDrag();
-        }
+        mItemManager.onRemoveAllViews();
+        checkIfAutoReleaseDrag();
     }
 
     @Override
@@ -512,6 +521,10 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
     public boolean onTouchEvent(MotionEvent event) {
         //sDebugger.i("onTouchEvent", event.toString());
         //sDebugger.i("onTouchEvent", "------> mDispatchToAlertWindow = " + mDispatchToAlertWindow +" ,mIsDragState = " + mIsDragState);
+        if(!mDraggable){
+            return super.onTouchEvent(event);
+        }
+
         mCancelled = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
         final boolean handled = mGestureDetector.onTouchEvent(event);
         //解决ScrollView嵌套DragFlowLayout时，引起的事件冲突
@@ -606,14 +619,14 @@ public class DragFlowLayout extends FlowLayout implements IViewObserverManager{
 
         public void onRemoveViewAt(int index) {
             sDebugger.d("onRemoveViewAt", "index = " + index );
-            Item item = null;
+            Item item ;
             for(int i=0,size = mItems.size() ;i<size ;i++){
                 item =  mItems.get(i);
                 if(item.index > index){
                     item.index --;
                 }
             }
-            mItems.remove(index);
+            item = mItems.remove(index);
             Collections.sort(mItems, sComparator);
            // debugWhenDebug("onAddView",mItems.toString());
             dispatchViewRemove(item.view, index);

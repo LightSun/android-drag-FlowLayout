@@ -15,31 +15,21 @@ import com.heaven7.memory.util.Cacher;
  */
 /*public*/ class DefaultDragCallback<T> extends DragFlowLayout.Callback implements IViewObserver {
 
+    private static final Debugger sDebugger = new Debugger("DefaultDragCallback",true);
     private final DragAdapter<T> mAdapter;
     private final Cacher<View,Void> mCacher = new Cacher<View, Void>() {
         @Override
         public View create(Void aVoid) {
-            DragFlowLayout.sDebugger.d("createItemView","---------------");
+            sDebugger.d("createItemView","---------------");
             ViewGroup parent = getDragFlowLayout();
             return LayoutInflater.from(parent.getContext()).inflate(mAdapter.getItemLayoutId(),
                     parent, false);
         }
 
         @Override
-        public View obtain() {
-            //DragFlowLayout.sDebugger.d("obtain","current size = " + getCurrentPoolSize());
-            final View view = super.obtain();
-           // DragFlowLayout.sDebugger.d("obtain","parent = " + view.getParent());
-            if(view.getParent() != null){
-                return obtain();
-            }
-            return view;
-        }
-
-        @Override
         protected void onRecycleSuccess(View view) {
             removeFromParent(view);
-            DragFlowLayout.sDebugger.d("onRecycleSuccess","parent = " + view.getParent()
+            sDebugger.d("onRecycleSuccess","parent = " + view.getParent()
                     + " ,child count = " + getDragFlowLayout().getChildCount());
         }
     };
@@ -65,7 +55,6 @@ import com.heaven7.memory.util.Cacher;
     @Override
     public View createChildView(View child, int index, int dragState) {
         View view = mCacher.obtain();
-       // removeFromParent(view);
         mAdapter.onBindData(view, dragState , mAdapter.getData(child));
         return view;
     }
@@ -87,23 +76,16 @@ import com.heaven7.memory.util.Cacher;
     }
     @Override
     public void onRemoveView(View child, int index) {
-        //removeFromParent(child);
          mCacher.recycle(child);
     }
 
     private void removeFromParent(View child) {
         final ViewParent parent = child.getParent();
         if(parent !=null && parent instanceof ViewGroup){
-            IViewObserverManager vom = null;
-            if(parent instanceof IViewObserverManager){
-                vom = (IViewObserverManager) parent;
-            }
-            if(vom!=null){
-                vom.enableViewObserver(false);
-            }
-            ((ViewGroup) parent).removeView(child);
-            if(vom!=null){
-                vom.enableViewObserver(true);
+            if(parent instanceof IViewManager){
+                ((IViewManager) parent).removeViewWithoutNotify(child);
+            }else{
+                ((ViewGroup) parent).removeView(child);
             }
         }
     }

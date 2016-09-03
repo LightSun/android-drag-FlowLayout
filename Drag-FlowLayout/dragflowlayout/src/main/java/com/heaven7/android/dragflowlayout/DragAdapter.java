@@ -6,9 +6,12 @@ import android.view.View;
 
 /**
  * drag adapter, this class is unlike the {@link android.widget.BaseAdapter} or other adapter.
- * and can't notify data change. if you should 'CRUD' item please use
+ * and can't notify data change. if you want 'CRUD' item please use
+ * {@link com.heaven7.android.dragflowlayout.DragFlowLayout.DragItemManager} by call {@link DragFlowLayout#getDragItemManager()}.
  * @param <T> the data
+ *
  */
+//deprecated , use {@link com.heaven7.android.dragflowlayout.DragItemManager.DragAdapter2}.
 public abstract class DragAdapter<T> {
 
     /**

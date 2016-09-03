@@ -62,7 +62,7 @@ public class DragFlowLayoutTest extends BaseActivity {
                 return (TestBean) itemView.getTag();
             }
         });
-        //预存指定个数的Item. 这些Item view会反复使用，避免重复创建
+        //预存指定个数的Item. 这些Item view会反复使用，避免重复创建, 默认10个
         mDragflowLayout.prepareItemsByCount(10);
         //设置拖拽状态监听器
         mDragflowLayout.setOnDragStateChangeListener(new DragFlowLayout.OnDragStateChangeListener() {

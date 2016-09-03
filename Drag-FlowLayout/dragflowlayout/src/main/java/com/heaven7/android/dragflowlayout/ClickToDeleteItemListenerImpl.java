@@ -6,7 +6,8 @@ import android.view.View;
 
 /**
  * a default implements for {@link com.heaven7.android.dragflowlayout.DragFlowLayout.OnItemClickListener}
- *  that support click to delete item in {@link DragFlowLayout}
+ * that support click to delete item in {@link DragFlowLayout}. you should call {@link #onDeleteSuccess(DragFlowLayout, View, Object)}
+ * to handle your logic.
  * Created by heaven7 on 2016/8/15.
  */
 public class ClickToDeleteItemListenerImpl implements DragFlowLayout.OnItemClickListener {
@@ -36,7 +37,7 @@ public class ClickToDeleteItemListenerImpl implements DragFlowLayout.OnItemClick
      * called when delete success
      * @param dfl the DragFlowLayout
      * @param child the direct child of DragFlowLayout
-     * @param data the data from child
+     * @param data the data from child , from {@link DragAdapter#getData(View)}
      */
     protected  void onDeleteSuccess(DragFlowLayout dfl, View child, Object data){
 
