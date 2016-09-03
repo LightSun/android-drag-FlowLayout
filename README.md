@@ -1,10 +1,8 @@
 # android-drag-FowLayout
 this is a draggable flow layout lib (android 可拖拽的流布局库) .
+[Sample apk/示例app](https://github.com/LightSun/android-drag-FlowLayout/tree/master/apk)
 
  <img src="/art/drag_flowlayout.gif" alt="Demo Screen Capture" width="296px" height="581px" />
- 
-
- [Sample apk/示例app](https://github.com/LightSun/android-drag-FlowLayout/tree/master/apk)
  
 
 ## 特点
