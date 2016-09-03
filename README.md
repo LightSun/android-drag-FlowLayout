@@ -54,7 +54,7 @@ repositories {
         jcenter()
 }
 
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.2'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.3'
 ``` 
 ```java
  <com.heaven7.android.dragflowlayout.DragFlowLayout
