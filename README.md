@@ -36,7 +36,7 @@ this is a draggable flow layout lib.
 ```
  - 3，可嵌套ScrollerView.  demo就是。
  - 4, 默认均可拖拽，如果想禁止某些Item拖拽请实现 {@link IDraggable} 接口 .
- - 5, 支持预存储一定个数的item. 
+ - 5, 支持预存储一定个数的item view. 以避免重复创建 
 ```java
  //预存指定个数的Item. 这些Item会反复使用
  mDragflowLayout.prepareItemsByCount(10);
