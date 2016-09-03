@@ -1,5 +1,5 @@
 # android-drag-FowLayout
-this is a draggable flow layout lib.
+this is a draggable flow layout lib (android 可拖拽的流布局库) .
 
  <img src="/art/drag_flowlayout.gif" alt="Demo Screen Capture" width="296px" height="581px" />
 
@@ -7,24 +7,7 @@ this is a draggable flow layout lib.
  - 1, 类似可拖拽的GridView. 不过gridView 宽度/个数是固定的。 这个布局item宽度是不定的（放不下自动换行）。
  - 2，长按item拖拽，如果要处理点击事件请调用。
 ```java
-  mDragflowLayout.setOnItemClickListener(new DragFlowLayout.OnItemClickListener() {
-            @Override
-            public boolean performClick(DragFlowLayout dragFlowLayout, View child,
-                                        MotionEvent event, int dragState) {
-                //检查是否点击了关闭按钮(iv_close控件)。点击了就删除
-                //ViewUtils.isViewUnderInScreen 判断点击事件是否是你需要的.
-                //dragState 是拖拽状态。
-                boolean performed = dragState != DragFlowLayout.DRAG_STATE_IDLE
-                        && ViewUtils.isViewUnderInScreen(child.findViewById(R.id.iv_close),
-                        (int) event.getRawX(),(int) event.getRawY());
-                if(performed){
-                    dragFlowLayout.removeView(child);
-                }
-                //点击事件
-                return performed;
-            }
-        });
-        //或者
+        
         mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
         
              //点击删除成功时回调
@@ -66,6 +49,14 @@ this is a draggable flow layout lib.
 ## 使用步骤
 - 1, 导入下面的gradle 配置。并在xml中添加配置
 ```java
+//gradle
+repositories {
+        jcenter()
+}
+
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.2'
+``` 
+```java
  <com.heaven7.android.dragflowlayout.DragFlowLayout
                 android:id="@+id/drag_flowLayout"
                 android:layout_width="match_parent"
@@ -74,24 +65,7 @@ this is a draggable flow layout lib.
 ```
 - 2，设置点击事件处理器 和 数据适配器.
 ```java
-  mDragflowLayout.setOnItemClickListener(new DragFlowLayout.OnItemClickListener() {
-            @Override
-            public boolean performClick(DragFlowLayout dragFlowLayout, View child,
-                                        MotionEvent event, int dragState) {
-                //检查是否点击了关闭按钮(iv_close控件)。点击了就删除
-                //ViewUtils.isViewUnderInScreen 判断点击事件是否是你需要的.
-                //dragState 是拖拽状态。
-                boolean performed = dragState != DragFlowLayout.DRAG_STATE_IDLE
-                        && ViewUtils.isViewUnderInScreen(child.findViewById(R.id.iv_close),
-                        (int) event.getRawX(),(int) event.getRawY());
-                if(performed){
-                    dragFlowLayout.removeView(child);
-                }
-                //点击事件
-                return performed;
-            }
-        });
-        //或者用这个处理点击事件
+        //用这个处理点击事件
         mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
             @Override
             protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
