@@ -126,10 +126,10 @@ repositories {
         jcenter()
 }
 
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.2'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.3'
 ```
 
-## 版本更新日志。
+## 重要版本更新日志。
 - 1, version(1.5.0)
    * （1) , 增加拖拽状态监听器 和 child view观察者
 - 2, version(1.5.1)
