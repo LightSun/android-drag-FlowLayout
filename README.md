@@ -1,7 +1,9 @@
 # android-drag-FowLayout
 this is a draggable flow layout lib (android 可拖拽的流布局库) .
+[Sample apk/示例app](https://github.com/LightSun/android-drag-FlowLayout/tree/master/apk)
 
  <img src="/art/drag_flowlayout.gif" alt="Demo Screen Capture" width="296px" height="581px" />
+ 
 
 ## 特点
  - 1, 类似可拖拽的GridView. 不过gridView 宽度/个数是固定的。 这个布局item宽度是不定的（放不下自动换行）。
@@ -54,7 +56,7 @@ repositories {
         jcenter()
 }
 
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.2'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.3'
 ``` 
 ```java
  <com.heaven7.android.dragflowlayout.DragFlowLayout
@@ -126,10 +128,10 @@ repositories {
         jcenter()
 }
 
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.2'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.3'
 ```
 
-## 版本更新日志。
+## 重要版本更新日志。
 - 1, version(1.5.0)
    * （1) , 增加拖拽状态监听器 和 child view观察者
 - 2, version(1.5.1)
