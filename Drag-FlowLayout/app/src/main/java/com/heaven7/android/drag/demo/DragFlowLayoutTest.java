@@ -90,6 +90,7 @@ public class DragFlowLayoutTest extends BaseActivity {
     }
     @OnClick(R.id.bt_done)
     public void onClickDone(View v){
+        //标记拖拽结束, 内部会自动将拖拽状态改为idle
         mDragflowLayout.finishDrag();
     }
 
