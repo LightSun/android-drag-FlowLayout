@@ -131,6 +131,26 @@ repositories {
 compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.3'
 ```
 
+## API说明
+```java
+  //设置拖拽状态监听器
+    public void setOnDragStateChangeListener(OnDragStateChangeListener l)
+ //获取拖拽状态
+    public @DragState int getDragState()
+ //设置Item点击事件处理器
+    public void setOnItemClickListener(OnItemClickListener l)
+ //设置数据适配器
+    void setDragAdapter(DragAdapter<T> adapter)
+ //获取Item管理器(方便CRUD-增删改查 item)
+    public DragItemManager getDragItemManager()
+ //设置全局是否可拖拽。如果false,则无法长按拖拽了。
+    public void setDraggable(boolean draggable)
+ //设置缓存view的个数。可避免重复创建item view
+    public void prepareItemsByCount(int count)
+ //标记拖拽结束, 内部会自动将拖拽状态改为 DRAG_STATE_IDLE .
+    public void finishDrag();
+```
+
 ## 重要版本更新日志。
 - 1, version(1.5.0)
    * （1) , 增加拖拽状态监听器 和 child view观察者
