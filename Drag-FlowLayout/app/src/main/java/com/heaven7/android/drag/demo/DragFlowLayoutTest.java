@@ -12,7 +12,6 @@ import com.heaven7.android.dragflowlayout.DragAdapter;
 import com.heaven7.android.dragflowlayout.DragFlowLayout;
 import com.heaven7.android.dragflowlayout.IDraggable;
 import com.heaven7.android.dragflowlayout.IViewObserver;
-import com.heaven7.android.transition.TransitionProvider;
 import com.heaven7.core.util.Logger;
 
 import butterknife.InjectView;
@@ -43,7 +42,7 @@ public class DragFlowLayoutTest extends BaseActivity {
 
     @Override
     protected void initView() {
-        mDragflowLayout.setLayoutTransition(TransitionProvider.createTransition(this));
+        //mDragflowLayout.setLayoutTransition(TransitionProvider.createTransition(this));
         mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
             @Override
             protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {

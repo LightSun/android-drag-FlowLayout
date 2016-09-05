@@ -893,14 +893,16 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
             final DragAdapter adapter = getDragAdapter();
             Object rawData;
             View view = null;
+            boolean found = false;
             for (int size = getChildCount(), i = size - 1; i >= 0; i--) {
                 view = getChildAt(i);
                 rawData = adapter.getData(view);
                 if (rawData.equals(preData)) {
+                    found = true;
                     break;
                 }
             }
-            if (view != null) {
+            if (found) {
                 adapter.onBindData(view,getDragState(),newData);
             }
         }
