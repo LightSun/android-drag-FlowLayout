@@ -27,6 +27,16 @@ import com.heaven7.memory.util.Cacher;
         }
 
         @Override
+        public View obtain() {
+            final View view = super.obtain();
+            if(view.getParent()!=null){
+                sDebugger.d("obtain","------ parent =" +  view.getParent());
+                return  obtain();
+            }
+            return view;
+        }
+
+        @Override
         protected void onRecycleSuccess(View view) {
             removeFromParent(view);
             sDebugger.d("onRecycleSuccess","parent = " + view.getParent()

@@ -38,12 +38,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         mToaster = new Toaster(this);
         mViewHelper = new ViewHelper(getWindow().getDecorView());
 
+        onPreSetContentView();
         setContentView(getlayoutId());
         ButterKnife.inject(this);
 
         initView();
         initData(savedInstanceState);
     }
+
+    protected void onPreSetContentView(){}
 
     @Override
     protected void onStop() {

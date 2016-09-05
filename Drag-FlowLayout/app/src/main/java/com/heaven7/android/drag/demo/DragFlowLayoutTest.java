@@ -3,6 +3,7 @@ package com.heaven7.android.drag.demo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.heaven7.android.BaseActivity;
@@ -11,6 +12,7 @@ import com.heaven7.android.dragflowlayout.DragAdapter;
 import com.heaven7.android.dragflowlayout.DragFlowLayout;
 import com.heaven7.android.dragflowlayout.IDraggable;
 import com.heaven7.android.dragflowlayout.IViewObserver;
+import com.heaven7.android.transition.TransitionProvider;
 import com.heaven7.core.util.Logger;
 
 import butterknife.InjectView;
@@ -33,7 +35,15 @@ public class DragFlowLayoutTest extends BaseActivity {
     }
 
     @Override
+    protected void onPreSetContentView() {
+        //test full screen
+        getWindow().setFlags(WindowManager.LayoutParams. FLAG_FULLSCREEN ,
+                WindowManager.LayoutParams. FLAG_FULLSCREEN);
+    }
+
+    @Override
     protected void initView() {
+        mDragflowLayout.setLayoutTransition(TransitionProvider.createTransition(this));
         mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
             @Override
             protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {

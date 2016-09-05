@@ -1,5 +1,6 @@
 package com.heaven7.android.dragflowlayout;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.PixelFormat;
 import android.view.Gravity;
@@ -18,6 +19,7 @@ public class AlertWindowHelper {
     private final WindowManager.LayoutParams mParams;
     private final float mTouchSlop;
     private final int mStateBarHeight;
+    private final boolean mFullScreen;
 
     private View mView;
     private ICallback mCallback;
@@ -42,6 +44,8 @@ public class AlertWindowHelper {
         this.mParams = createWindowParams();
         this.mStateBarHeight = ViewUtils.getStatusHeight(context);
         this.mTouchSlop = ViewConfiguration.get(context).getScaledTouchSlop();
+        this.mFullScreen = context instanceof Activity && (((Activity) context).getWindow()
+                .getAttributes().flags & WindowManager.LayoutParams.FLAG_FULLSCREEN ) != 0 ;
     }
 
     public View getView() {
@@ -157,7 +161,7 @@ public class AlertWindowHelper {
      * @return the really y position
      */
     private int adjustY(int top) {
-        return top - mStateBarHeight;
+        return mFullScreen ? top : top - mStateBarHeight;
     }
 
     private boolean checkTouchSlop(float dx, float dy) {
