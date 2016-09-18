@@ -95,6 +95,7 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
     /** indicate can draggable for all items */
     private boolean mDraggable = true;
 
+    private boolean mIntercepted;
     /**
      * the drag state change listener
      * if {@link DragFlowLayout #setDraggable(false)} is called, this listener will have nothing effect.
@@ -525,23 +526,39 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
     }
 
     @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        if(!mDraggable){
+            return super.onInterceptTouchEvent(ev);
+        }
+        //sDebugger.i("onInterceptTouchEvent", ev.toString());
+        return (mIntercepted = mGestureDetector.onTouchEvent(ev));
+    }
+
+    @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //sDebugger.i("onTouchEvent", event.toString());
+        sDebugger.i("onTouchEvent", event.toString());
         //sDebugger.i("onTouchEvent", "------> mDispatchToAlertWindow = " + mDispatchToAlertWindow +" ,mIsDragState = " + mIsDragState);
         if(!mDraggable){
             return super.onTouchEvent(event);
         }
 
         mCancelled = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
-        final boolean handled = mGestureDetector.onTouchEvent(event);
+        final boolean handled ;
+        if(mIntercepted){
+            handled = true;
+            mIntercepted = false;
+        }else{
+            handled = mGestureDetector.onTouchEvent(event);
+        }
         //解决ScrollView嵌套DragFlowLayout时，引起的事件冲突
-        if(getParent()!=null){
+        if(getParent() != null){
             getParent().requestDisallowInterceptTouchEvent(mDragState != DRAG_STATE_IDLE);
         }
         if(mDispatchToAlertWindow){
             mWindomHelper.getView().dispatchTouchEvent(event);
             if(mCancelled){
                 mDispatchToAlertWindow = false;
+                mIntercepted = false;
             }
         }
         return handled;

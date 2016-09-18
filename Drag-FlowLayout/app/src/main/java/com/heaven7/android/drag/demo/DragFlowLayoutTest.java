@@ -2,17 +2,18 @@ package com.heaven7.android.drag.demo;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.heaven7.adapter.BaseSelector;
 import com.heaven7.android.BaseActivity;
 import com.heaven7.android.dragflowlayout.ClickToDeleteItemListenerImpl;
 import com.heaven7.android.dragflowlayout.DragAdapter;
 import com.heaven7.android.dragflowlayout.DragFlowLayout;
 import com.heaven7.android.dragflowlayout.IDraggable;
 import com.heaven7.android.dragflowlayout.IViewObserver;
-import com.heaven7.android.transition.TransitionProvider;
 import com.heaven7.core.util.Logger;
 
 import butterknife.InjectView;
@@ -27,6 +28,8 @@ public class DragFlowLayoutTest extends BaseActivity {
 
     @InjectView(R.id.drag_flowLayout)
     DragFlowLayout mDragflowLayout;
+    @InjectView(R.id.rv)
+    RecyclerView mRv;
 
     private int mIndex;
     @Override
@@ -43,7 +46,7 @@ public class DragFlowLayoutTest extends BaseActivity {
 
     @Override
     protected void initView() {
-        mDragflowLayout.setLayoutTransition(TransitionProvider.createTransition(this));
+       // mDragflowLayout.setLayoutTransition(TransitionProvider.createTransition(this));
         mDragflowLayout.setOnItemClickListener(new ClickToDeleteItemListenerImpl(R.id.iv_close){
             @Override
             protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
@@ -93,6 +96,20 @@ public class DragFlowLayoutTest extends BaseActivity {
             }
         });
     }
+/*
+    private void addTestData() {
+        mRv.setLayoutManager(new LinearLayoutManager(this));
+        final List<TestBean> list = new ArrayList<>();
+        for(int i=0 ,size = 50 ; i < size ;i++){
+            list.add(new TestBean("test ----------> " + i));
+        }
+        mRv.setAdapter(new QuickRecycleViewAdapter<TestBean>(android.R.layout.simple_list_item_1, list) {
+            @Override
+            protected void onBindData(Context context, int position, TestBean item, int itemLayoutId, ViewHelper helper) {
+                   helper.setText(android.R.id.text1, item.text);
+            }
+        });
+    }*/
 
     @Override
     protected void initData(Bundle savedInstanceState) {
@@ -132,7 +149,7 @@ public class DragFlowLayoutTest extends BaseActivity {
     }
 
     /** 如果想禁止某些Item拖拽请实现 {@link IDraggable} 接口 */
-    private static class  TestBean implements IDraggable{
+    private static class  TestBean  extends BaseSelector implements IDraggable{
         String text;
         boolean draggable = true;
         public TestBean(String text) {
@@ -142,5 +159,6 @@ public class DragFlowLayoutTest extends BaseActivity {
         public boolean isDraggable() {
             return draggable;
         }
+
     }
 }
