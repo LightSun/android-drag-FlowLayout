@@ -123,7 +123,7 @@ public class DragFlowLayoutTest extends BaseActivity {
 
     @OnClick(R.id.bt_add)
     public void onClickAdd(View v){
-        final TestBean bean = new TestBean("test_" + (mIndex++));
+        final TestBean bean = new TestBean( "test_" + (mIndex ++ ) * caculateShift( mIndex ) + "" );
         int index;
         if(mDragflowLayout.getChildCount()==0) {
             //为了测试，设置第一个条目不准拖拽
@@ -133,6 +133,9 @@ public class DragFlowLayoutTest extends BaseActivity {
             index = 1;
         }
         mDragflowLayout.getDragItemManager().addItem(index, bean);
+    }
+    private int caculateShift(int src){
+        return (int) Math.pow(10, src % 3 + 1 );
     }
     @OnClick(R.id.bt_remove_center)
     public void onClickRemoveCenter(View v){

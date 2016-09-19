@@ -95,7 +95,7 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
     /** indicate can draggable for all items */
     private boolean mDraggable = true;
 
-    private boolean mIntercepted;
+    private boolean mRequestedDisallowIntercept;
     /**
      * the drag state change listener
      * if {@link DragFlowLayout #setDraggable(false)} is called, this listener will have nothing effect.
@@ -419,7 +419,7 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
         if(notifyDragStateChange){
              dispatchDragStateChange(DRAG_STATE_DRAGGABLE);
         }
-
+        mRequestedDisallowIntercept = false;
     }
 
     private void checkCallback() {
@@ -525,14 +525,14 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
         removeCallbacks(mCheckForRelease);
     }
 
-    @Override
+   /* @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if(!mDraggable){
             return super.onInterceptTouchEvent(ev);
         }
-        //sDebugger.i("onInterceptTouchEvent", ev.toString());
+        sDebugger.i("onInterceptTouchEvent", ev.toString());
         return (mIntercepted = mGestureDetector.onTouchEvent(ev));
-    }
+    }*/
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -543,22 +543,15 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
         }
 
         mCancelled = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
-        final boolean handled ;
-        if(mIntercepted){
-            handled = true;
-            mIntercepted = false;
-        }else{
-            handled = mGestureDetector.onTouchEvent(event);
-        }
+        final boolean handled = mGestureDetector.onTouchEvent(event);
         //解决ScrollView嵌套DragFlowLayout时，引起的事件冲突
         if(getParent() != null){
-            getParent().requestDisallowInterceptTouchEvent(mDragState != DRAG_STATE_IDLE);
+            getParent().requestDisallowInterceptTouchEvent(mRequestedDisallowIntercept || mDragState != DRAG_STATE_IDLE);
         }
         if(mDispatchToAlertWindow){
             mWindomHelper.getView().dispatchTouchEvent(event);
             if(mCancelled){
                 mDispatchToAlertWindow = false;
-                mIntercepted = false;
             }
         }
         return handled;
@@ -741,6 +734,11 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
             //sDebugger.i("mGestureDetector_onLongPress","----------------- >");
             if(mDragState!= DRAG_STATE_DRAGGING  && mTouchChild!=null
                     && mCallback.isChildDraggable( mTouchChild)) {
+                sDebugger.w(TAG, "onLongPress");
+               if(getParent() != null){
+                   getParent().requestDisallowInterceptTouchEvent(true);
+                   mRequestedDisallowIntercept = true;
+                }
                 sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_LONG_CLICKED);
                 performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
                 setDragState(DRAG_STATE_DRAGGING, false);
