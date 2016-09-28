@@ -31,5 +31,5 @@ dependencies {
     compile 'com.heaven7.core.util:util-v1:1.1.0'
 
     compile project (':dragflowlayout')
-   // compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.6.3'
+  // compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.2'
 }
