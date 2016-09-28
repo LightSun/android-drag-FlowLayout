@@ -314,6 +314,7 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
 
     /** tag finish the drag state */
     public void finishDrag(){
+        releaseDragInternal(false);
         setDragState(DragFlowLayout.DRAG_STATE_IDLE, true);
         dispatchDragStateChange(DragFlowLayout.DRAG_STATE_IDLE);
     }

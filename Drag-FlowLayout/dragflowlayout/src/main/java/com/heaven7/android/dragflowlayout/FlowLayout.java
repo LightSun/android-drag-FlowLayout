@@ -32,6 +32,9 @@ public class FlowLayout extends ViewGroup {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 
+    public int getLineCount(){
+        return mLineHeight.size();
+    }
     @Override
     protected LayoutParams generateLayoutParams(
             LayoutParams p) {
