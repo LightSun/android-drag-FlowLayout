@@ -169,7 +169,8 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.3'
 ```
 - 4, version(1.6.2)
    * （1) , fix bug of issue(#1) 
- 
+- 5, version(1.8.3)
+     fix a bug of multi fask click with touch scrol (解决多次点击+滑动的问题)
 ## 一些思想
    * 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
    * 2, RecyclerView的自定义LayoutManager + onItem touch / 应该也可以.
