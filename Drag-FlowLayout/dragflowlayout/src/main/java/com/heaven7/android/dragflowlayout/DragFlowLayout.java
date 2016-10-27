@@ -529,6 +529,7 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
 
     @Override
     protected Parcelable onSaveInstanceState() {
+        System.err.println("onSaveInstanceState");
         return super.onSaveInstanceState();
     }
 

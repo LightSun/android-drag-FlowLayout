@@ -2,6 +2,7 @@ package com.heaven7.android.dragflowlayout;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -11,34 +12,35 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * use {@link FlowLayout2} instead.
- */
-@Deprecated
-public class FlowLayout extends ViewGroup {
+public class FlowLayout2 extends ViewGroup {
 
     private static final String TAG = "FlowLayout";
+
     private static final boolean sDebug = true;
+
     private int mMaxLine = Integer.MAX_VALUE;
     private boolean mHasMoreByMaxLine;
 
-    public FlowLayout(Context context, AttributeSet attrs) {
+    private int mHorizontalSpace;
+    private int mVerticalSpace;
+
+    public FlowLayout2(Context context, AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public FlowLayout(Context context) {
+    public FlowLayout2(Context context) {
         super(context);
         init(context, null);
     }
 
-    public FlowLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public FlowLayout2(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     @TargetApi(21)
-    public FlowLayout(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public FlowLayout2(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(context, attrs);
     }
@@ -47,6 +49,8 @@ public class FlowLayout extends ViewGroup {
         if (attrs != null) {
             final TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.FlowLayout);
             this.mMaxLine = a.getInt(a.getIndex(R.styleable.FlowLayout_flowLayout_maxLine), Integer.MAX_VALUE);
+            this.mHorizontalSpace = a.getDimensionPixelSize(a.getIndex(R.styleable.FlowLayout_flowLayout_horizontal_space), 0);
+            this.mVerticalSpace = a.getDimensionPixelSize(a.getIndex(R.styleable.FlowLayout_flowLayout_vertical_space), 0);
             a.recycle();
         }
     }
@@ -71,8 +75,18 @@ public class FlowLayout extends ViewGroup {
         return mHasMoreByMaxLine;
     }
 
+    @Deprecated
     public int getRealLineCount(){
         return mLineHeights.size();
+    }
+    public int getExactLineCount(){
+        return mLineHeights.size();
+    }
+
+    @Override
+    protected void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //TODO
     }
 
     @Override
@@ -110,7 +124,7 @@ public class FlowLayout extends ViewGroup {
             Log.e(TAG, sizeWidth + "," + sizeHeight);
 
         // 如果是warp_content情况下，记录宽和高
-        int width = 0;
+        int maxWidth = 0;
         int height = 0;
         /**
          * 记录每一行的宽度，width不断取最大宽度
@@ -121,61 +135,58 @@ public class FlowLayout extends ViewGroup {
          */
         int lineHeight = 0;
 
-        int cCount = getChildCount();
+        int childCount = getChildCount();
 
         int rows = 1;
         boolean limited = false;  //限制多行
 
         // 遍历每个子元素
-        for (int i = 0; i < cCount; i++) {
+        for (int i = 0; i < childCount; i++) {
             View child = getChildAt(i);
             // 测量每一个child的宽和高
             measureChild(child, widthMeasureSpec, heightMeasureSpec);
             // 得到child的lp
-            MarginLayoutParams lp = (MarginLayoutParams) child
-                    .getLayoutParams();
+            MarginLayoutParams lp = (MarginLayoutParams) child.getLayoutParams();
             // 当前子空间实际占据的宽度
-            int childWidth = child.getMeasuredWidth() + lp.leftMargin
-                    + lp.rightMargin;
+            int childWidth = child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
             // 当前子空间实际占据的高度
-            int childHeight = child.getMeasuredHeight() + lp.topMargin
-                    + lp.bottomMargin;
+            int childHeight = child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
             /**
              * 如果加入当前child，则超出最大宽度，则的到目前最大宽度给width，类加height 然后开启新行
              */
-            if (lineWidth + childWidth > sizeWidth) {
+            if (lineWidth + childWidth + mHorizontalSpace > sizeWidth) {
+                // 叠加当前高度，
+                height += lineHeight;
                 if(!limited) {
-                    width = Math.max(lineWidth, childWidth);// 取最大的
-                    lineWidth = childWidth; // 重新开启新行，开始记录
-                    // 叠加当前高度，
-                    height += lineHeight;
+                    maxWidth = Math.max(lineWidth, childWidth);// 取最大的
+                    lineWidth = childWidth;  //重新开启新行，开始记录
                     // 开启记录下一行的高度
                     lineHeight = childHeight;
 
                     rows ++;
+                    //check max line count
                     if (rows == mMaxLine) {
                         limited = true;
                     }
                     mHasMoreByMaxLine = false;
                 }else{
-                    width = Math.max(width, lineWidth);
-                    height += lineHeight;
+                    maxWidth = Math.max(maxWidth, lineWidth);
                     mHasMoreByMaxLine = true;
                     break;
                 }
             } else {
-                //否则累加值lineWidth,lineHeight取最大高度
-                lineWidth += childWidth;
+                //否则累加值lineWidth,lineHeight取最大值
+                lineWidth +=   childWidth + mHorizontalSpace;
                 lineHeight = Math.max(lineHeight, childHeight);
             }
             // 如果是最后一个，则将当前记录的最大宽度和当前lineWidth做比较
-            if (i == cCount - 1) {
-                width = Math.max(width, lineWidth);
+            if (i == childCount - 1) {
+                maxWidth = Math.max(maxWidth, lineWidth);
                 height += lineHeight;
             }
         }
         setMeasuredDimension(
-                (modeWidth == MeasureSpec.EXACTLY) ? sizeWidth : width,
+                (modeWidth == MeasureSpec.EXACTLY) ? sizeWidth : maxWidth,
                 (modeHeight == MeasureSpec.EXACTLY) ? sizeHeight : height);
 
     }

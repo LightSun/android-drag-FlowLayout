@@ -3,6 +3,8 @@
 
     <declare-styleable name="FlowLayout">
         <attr name="flowLayout_maxLine"  format="reference|integer"/>
+        <attr name="flowLayout_horizontal_space" format="dimension|reference"/>
+        <attr name="flowLayout_vertical_space"  format="dimension|reference"/>
     </declare-styleable>
 
 </resources>
