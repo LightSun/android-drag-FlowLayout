@@ -2,6 +2,7 @@ package com.heaven7.android.dragflowlayout;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Parcelable;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GestureDetectorCompat;
@@ -526,7 +527,12 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
         removeCallbacks(mCheckForRelease);
     }
 
-   /* @Override
+    @Override
+    protected Parcelable onSaveInstanceState() {
+        return super.onSaveInstanceState();
+    }
+
+    /* @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         if(!mDraggable){
             return super.onInterceptTouchEvent(ev);
@@ -923,6 +929,5 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
             }
         }
     }
-
 
 }
