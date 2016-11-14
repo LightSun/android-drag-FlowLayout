@@ -19,6 +19,13 @@ allprojects {
     repositories {
         jcenter()
     }
+
+    //解决生成javadoc失败导致的上传不了bintray,  so  Disable javadoc check for Bintray upload
+    tasks.withType(Javadoc) {
+        // options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('X', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
+    }
 }
 
 task clean(type: Delete) {

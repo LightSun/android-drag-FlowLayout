@@ -18,7 +18,7 @@ import java.util.List;
 public class FlowLayout extends ViewGroup {
 
     private static final String TAG = "FlowLayout";
-    private static final boolean sDebug = true;
+    private static final boolean sDebug = false;
     private int mMaxLine = Integer.MAX_VALUE;
     private boolean mHasMoreByMaxLine;
 

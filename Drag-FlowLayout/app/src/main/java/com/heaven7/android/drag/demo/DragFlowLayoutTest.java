@@ -3,6 +3,7 @@ package com.heaven7.android.drag.demo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -14,7 +15,6 @@ import com.heaven7.android.dragflowlayout.DragAdapter;
 import com.heaven7.android.dragflowlayout.DragFlowLayout;
 import com.heaven7.android.dragflowlayout.IDraggable;
 import com.heaven7.android.dragflowlayout.IViewObserver;
-import com.heaven7.core.util.Logger;
 
 import butterknife.InjectView;
 import butterknife.OnClick;
@@ -52,6 +52,12 @@ public class DragFlowLayoutTest extends BaseActivity {
             protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
                 //删除成功后的处理。
             }
+
+            @Override
+            public boolean performClick(DragFlowLayout dragFlowLayout, View child, MotionEvent event, int dragState) {
+                super.performClick(dragFlowLayout, child, event, dragState);
+                return true;
+            }
         });
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
             @Override
@@ -81,18 +87,18 @@ public class DragFlowLayoutTest extends BaseActivity {
         mDragflowLayout.setOnDragStateChangeListener(new DragFlowLayout.OnDragStateChangeListener() {
             @Override
             public void onDragStateChange(DragFlowLayout dfl, int dragState) {
-                System.out.println("on drag state change : dragState = " + dragState);
+              //  System.out.println("on drag state change : dragState = " + dragState);
             }
         });
         //添加view观察者
         mDragflowLayout.addViewObserver(new IViewObserver() {
             @Override
             public void onAddView(View child, int index) {
-                Logger.i(TAG, "onAddView", "index = " + index);
+               // Logger.i(TAG, "onAddView", "index = " + index);
             }
             @Override
             public void onRemoveView(View child, int index) {
-               Logger.i(TAG, "onRemoveView", "index = " + index);
+              // Logger.i(TAG, "onRemoveView", "index = " + index);
             }
         });
     }

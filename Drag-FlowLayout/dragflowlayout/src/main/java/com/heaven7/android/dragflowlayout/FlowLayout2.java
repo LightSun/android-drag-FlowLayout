@@ -1,18 +1,7 @@
 package com.heaven7.android.dragflowlayout;
 
-import android.annotation.TargetApi;
-import android.content.Context;
-import android.content.res.Configuration;
-import android.content.res.TypedArray;
-import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class FlowLayout2 extends ViewGroup {
+/*
+class FlowLayout2 extends ViewGroup {
 
     private static final String TAG = "FlowLayout";
 
@@ -67,10 +56,12 @@ public class FlowLayout2 extends ViewGroup {
         return mMaxLine;
     }
 
-    /**
+    */
+/**
      * has more line by the max line.
      * @return  true if has more line
-     */
+     *//*
+
     public boolean hasMoreLine(){
         return mHasMoreByMaxLine;
     }
@@ -107,9 +98,11 @@ public class FlowLayout2 extends ViewGroup {
                 LayoutParams.WRAP_CONTENT);
     }
 
-    /**
+    */
+/**
      * 负责设置子控件的测量模式和大小 根据所有子控件设置自己的宽和高
-     */
+     *//*
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
@@ -126,13 +119,17 @@ public class FlowLayout2 extends ViewGroup {
         // 如果是warp_content情况下，记录宽和高
         int maxWidth = 0;
         int height = 0;
-        /**
+        */
+/**
          * 记录每一行的宽度，width不断取最大宽度
-         */
+         *//*
+
         int lineWidth = 0;
-        /**
+        */
+/**
          * 每一行的高度，累加至height
-         */
+         *//*
+
         int lineHeight = 0;
 
         int childCount = getChildCount();
@@ -151,9 +148,11 @@ public class FlowLayout2 extends ViewGroup {
             int childWidth = child.getMeasuredWidth() + lp.leftMargin + lp.rightMargin;
             // 当前子空间实际占据的高度
             int childHeight = child.getMeasuredHeight() + lp.topMargin + lp.bottomMargin;
-            /**
+            */
+/**
              * 如果加入当前child，则超出最大宽度，则的到目前最大宽度给width，类加height 然后开启新行
-             */
+             *//*
+
             if (lineWidth + childWidth + mHorizontalSpace > sizeWidth) {
                 // 叠加当前高度，
                 height += lineHeight;
@@ -191,13 +190,17 @@ public class FlowLayout2 extends ViewGroup {
 
     }
 
-    /**
+    */
+/**
      * 存储所有的View，按行记录
-     */
+     *//*
+
     private List<List<View>> mAllViews = new ArrayList<List<View>>();
-    /**
+    */
+/**
      * 记录每一行的最大高度
-     */
+     *//*
+
     private List<Integer> mLineHeights = new ArrayList<Integer>();
 
     @Override
@@ -229,9 +232,11 @@ public class FlowLayout2 extends ViewGroup {
                 lineWidth = 0;// 重置行宽
                 lineViews = new ArrayList<View>();
             }
-            /**
+            */
+/**
              * 如果不需要换行，则累加
-             */
+             *//*
+
             lineWidth += childWidth + lp.leftMargin + lp.rightMargin;
             lineHeight = Math.max(lineHeight, childHeight + lp.topMargin
                     + lp.bottomMargin);
@@ -286,3 +291,4 @@ public class FlowLayout2 extends ViewGroup {
 
     }
 }
+*/

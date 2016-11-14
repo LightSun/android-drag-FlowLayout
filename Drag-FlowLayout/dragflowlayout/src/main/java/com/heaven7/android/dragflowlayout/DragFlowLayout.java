@@ -2,6 +2,7 @@ package com.heaven7.android.dragflowlayout;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -35,13 +36,13 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
 
     public static final int INVALID_INDXE = -1;
     /** the delay of check click event. */
-    private static final int DELAY_CHECK_CLICK = 130;
+    private static final int DELAY_CHECK_CLICK = 360;
 
-    /** indicate currrent is idle, and can't draggable  */
+    /** indicate current is idle, and can't draggable  */
     public static final int DRAG_STATE_IDLE       = 1;
-    /** indicate currrent is dragging                   */
+    /** indicate current is dragging                   */
     public static final int DRAG_STATE_DRAGGING   = 2;
-    /** indicate currrent is not dragging but can drag  */
+    /** indicate current is not dragging but can drag  */
     public static final int DRAG_STATE_DRAGGABLE  = 3;
 
     @Retention(RetentionPolicy.SOURCE)
@@ -529,7 +530,7 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
 
     @Override
     protected Parcelable onSaveInstanceState() {
-        System.err.println("onSaveInstanceState");
+        System.err.println("onSaveInstanceState");  //屏幕旋转也会调用
         return super.onSaveInstanceState();
     }
 
@@ -539,6 +540,17 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
             return super.onInterceptTouchEvent(ev);
         }
         sDebugger.i("onInterceptTouchEvent", ev.toString());
+         switch (ev.getAction()){
+             case MotionEvent.ACTION_DOWN:
+
+                 break;
+
+             case MotionEvent.ACTION_MOVE:
+                 break;
+
+             case MotionEvent.ACTION_UP:
+                 break;
+         }
         return (mIntercepted = mGestureDetector.onTouchEvent(ev));
     }*/
 
@@ -549,9 +561,8 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
         if(!mDraggable){
             return super.onTouchEvent(event);
         }
-
-        mCancelled = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
         final boolean handled = mGestureDetector.onTouchEvent(event);
+        mCancelled = event.getAction() == MotionEvent.ACTION_CANCEL || event.getAction() == MotionEvent.ACTION_UP;
         //解决ScrollView嵌套DragFlowLayout时，引起的事件冲突
         if(getParent() != null){
             getParent().requestDisallowInterceptTouchEvent(mRequestedDisallowIntercept || mDragState != DRAG_STATE_IDLE);
@@ -583,6 +594,40 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
                 releaseDragInternal(true);
             }
         }
+    }
+
+    protected static class SaveState extends BaseSavedState {
+       //int mDragState  , mDraggable, list data
+        int mDragState;
+        boolean mDraggable;
+
+        public SaveState(Parcel source) {
+            super(source);
+            //TODO
+           // mNeedIntercept = source.readByte() == 1;
+        }
+
+        public SaveState(Parcelable superState) {
+            super(superState);
+        }
+
+        @Override
+        public void writeToParcel(Parcel out, int flags) {
+            super.writeToParcel(out, flags);
+        }
+
+        public static final Parcelable.Creator<SaveState> CREATOR
+                = new Parcelable.Creator<SaveState>() {
+            @Override
+            public SaveState createFromParcel(Parcel in) {
+                return new SaveState(in);
+            }
+
+            @Override
+            public SaveState[] newArray(int size) {
+                return new SaveState[size];
+            }
+        };
     }
 
     private static class Item{
@@ -704,8 +749,10 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
         }
     }
     private class GestureListenerImpl extends GestureDetector.SimpleOnGestureListener{
+
         @Override
         public boolean onDown(MotionEvent e) {
+            removeCallbacks(mCheckForDrag);
             mTouchChild = findTopChildUnder((int) e.getX(), (int) e.getY());
             sDebugger.i("mGestureDetector_onDown","----------------- > after find : mTouchChild = "
                     + mTouchChild);
@@ -720,6 +767,7 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
             }
             return mTouchChild != null;
         }
+
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_CLICKED);

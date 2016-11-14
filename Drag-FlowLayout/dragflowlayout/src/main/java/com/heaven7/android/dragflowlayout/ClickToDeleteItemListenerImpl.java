@@ -16,6 +16,7 @@ public class ClickToDeleteItemListenerImpl implements DragFlowLayout.OnItemClick
 
     /**
      * create ClickToDeleteItemListenerImpl with a delete id.
+     *
      * @param id the view id for delete this item
      */
     public ClickToDeleteItemListenerImpl(int id) {
@@ -25,25 +26,27 @@ public class ClickToDeleteItemListenerImpl implements DragFlowLayout.OnItemClick
     @Override
     public boolean performClick(DragFlowLayout dragFlowLayout, View child, MotionEvent event, int dragState) {
         //检查是否点击了关闭按钮。点击了就删除
-        boolean performed = dragState != DragFlowLayout.DRAG_STATE_IDLE && ViewUtils.isViewUnderInScreen(
-                child.findViewById(mDeleteViewId), (int) event.getRawX(),(int) event.getRawY());
-        if(performed){
-            dragFlowLayout.postDelayed(new DeleteRunnable(dragFlowLayout,child), 60);
+        final View mDeleteView = child.findViewById(mDeleteViewId);
+        boolean performed = dragState != DragFlowLayout.DRAG_STATE_IDLE && mDeleteView.getVisibility() == View.VISIBLE
+                && ViewUtils.isViewUnderInScreen(mDeleteView, (int) event.getRawX(), (int) event.getRawY());
+        if (performed) {
+            dragFlowLayout.postDelayed(new DeleteRunnable(dragFlowLayout, child), 60);
         }
-        return performed;
+        return false;
     }
 
     /**
      * called when delete success
-     * @param dfl the DragFlowLayout
+     *
+     * @param dfl   the DragFlowLayout
      * @param child the direct child of DragFlowLayout
-     * @param data the data from child , from {@link DragAdapter#getData(View)}
+     * @param data  the data from child , from {@link DragAdapter#getData(View)}
      */
-    protected  void onDeleteSuccess(DragFlowLayout dfl, View child, Object data){
+    protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
 
     }
 
-    private class DeleteRunnable implements Runnable{
+    private class DeleteRunnable implements Runnable {
         private final DragFlowLayout mParent;
         private final View mChild;
 
