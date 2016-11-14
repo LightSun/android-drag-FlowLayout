@@ -98,6 +98,8 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
     private boolean mDraggable = true;
 
     private boolean mRequestedDisallowIntercept;
+    private boolean mPendingDrag;
+
     /**
      * the drag state change listener
      * if {@link DragFlowLayout #setDraggable(false)} is called, this listener will have nothing effect.
@@ -751,7 +753,18 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
     private class GestureListenerImpl extends GestureDetector.SimpleOnGestureListener{
 
         @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+            if(!mDispatchToAlertWindow && !mPendingDrag && mDragState != DRAG_STATE_IDLE
+                    && mCallback.isChildDraggable( mTouchChild ) ) {
+                mPendingDrag = true;
+                checkForDrag(0, false);
+            }
+            return true;
+        }
+
+        @Override
         public boolean onDown(MotionEvent e) {
+            mPendingDrag = false;
             removeCallbacks(mCheckForDrag);
             mTouchChild = findTopChildUnder((int) e.getX(), (int) e.getY());
             sDebugger.i("mGestureDetector_onDown","----------------- > after find : mTouchChild = "
@@ -759,11 +772,11 @@ public class DragFlowLayout extends FlowLayout implements IViewManager {
             mReDrag = false;
             if(mTouchChild != null ){
                 mWindomHelper.setTouchDownPosition((int) e.getRawX(),(int) e.getRawY() );
-                if(!mDispatchToAlertWindow && mDragState != DRAG_STATE_IDLE
+               /* if(!mDispatchToAlertWindow && mDragState != DRAG_STATE_IDLE
                         && mCallback.isChildDraggable( mTouchChild ) ) {
                     mReDrag = true;
                     checkForDrag(DELAY_CHECK_CLICK, false);
-                }
+                }*/
             }
             return mTouchChild != null;
         }
