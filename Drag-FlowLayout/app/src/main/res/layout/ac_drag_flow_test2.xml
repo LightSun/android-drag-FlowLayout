@@ -35,6 +35,14 @@
             android:id="@+id/bt_done"
             />
     </LinearLayout>
+    <Button
+        android:id="@+id/bt_begin_drag"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="begin drag directly"
+        />
+
 
     <ScrollView
         android:layout_width="match_parent"
@@ -56,14 +64,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textAllCaps="false"
-                android:text="i am the best!"
+                android:text="i am the best!  (click this will do nothing)"
                 />
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                >
-            </android.support.v7.widget.RecyclerView>
         </LinearLayout>
 
     </ScrollView>

@@ -2,8 +2,6 @@ package com.heaven7.android.drag.demo;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
@@ -28,8 +26,6 @@ public class DragFlowLayoutTest extends BaseActivity {
 
     @InjectView(R.id.drag_flowLayout)
     DragFlowLayout mDragflowLayout;
-    @InjectView(R.id.rv)
-    RecyclerView mRv;
 
     private int mIndex;
     @Override
@@ -51,12 +47,6 @@ public class DragFlowLayoutTest extends BaseActivity {
             @Override
             protected void onDeleteSuccess(DragFlowLayout dfl, View child, Object data) {
                 //删除成功后的处理。
-            }
-
-            @Override
-            public boolean performClick(DragFlowLayout dragFlowLayout, View child, MotionEvent event, int dragState) {
-                super.performClick(dragFlowLayout, child, event, dragState);
-                return true;
             }
         });
         mDragflowLayout.setDragAdapter(new DragAdapter<TestBean>() {
@@ -102,24 +92,15 @@ public class DragFlowLayoutTest extends BaseActivity {
             }
         });
     }
-/*
-    private void addTestData() {
-        mRv.setLayoutManager(new LinearLayoutManager(this));
-        final List<TestBean> list = new ArrayList<>();
-        for(int i=0 ,size = 50 ; i < size ;i++){
-            list.add(new TestBean("test ----------> " + i));
-        }
-        mRv.setAdapter(new QuickRecycleViewAdapter<TestBean>(android.R.layout.simple_list_item_1, list) {
-            @Override
-            protected void onBindData(Context context, int position, TestBean item, int itemLayoutId, ViewHelper helper) {
-                   helper.setText(android.R.id.text1, item.text);
-            }
-        });
-    }*/
 
     @Override
     protected void initData(Bundle savedInstanceState) {
 
+    }
+
+    @OnClick(R.id.bt_begin_drag)
+    public void onClickBeginDrag(View v){
+        mDragflowLayout.beginDrag();
     }
     @OnClick(R.id.bt_done)
     public void onClickDone(View v){

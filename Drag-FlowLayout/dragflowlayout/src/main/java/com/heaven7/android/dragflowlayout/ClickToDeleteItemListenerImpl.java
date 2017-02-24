@@ -32,7 +32,7 @@ public class ClickToDeleteItemListenerImpl implements DragFlowLayout.OnItemClick
         if (performed) {
             dragFlowLayout.postDelayed(new DeleteRunnable(dragFlowLayout, child), 60);
         }
-        return false;
+        return true;
     }
 
     /**
