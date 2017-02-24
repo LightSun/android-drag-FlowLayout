@@ -56,7 +56,7 @@ repositories {
         jcenter()
 }
 
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.3'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.8'
 ``` 
 ```java
  <com.heaven7.android.dragflowlayout.DragFlowLayout
@@ -128,7 +128,7 @@ repositories {
         jcenter()
 }
 
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.3'
+compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.8'
 ```
 
 ## API说明
@@ -147,6 +147,9 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.3'
     public void setDraggable(boolean draggable)
  //设置缓存view的个数。可避免重复创建item view
     public void prepareItemsByCount(int count)
+    
+  //标记拖拽开始，这个会使得拖拽状态变更为draggable. .
+     public void beginDrag();
  //标记拖拽结束, 内部会自动将拖拽状态改为 DRAG_STATE_IDLE .
     public void finishDrag();
 ```
@@ -171,7 +174,9 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.3'
    * （1) , fix bug of issue(#1) 
 - 5, version(1.8.3)
      fix a bug of multi fask click with touch scrol (解决多次点击+滑动的问题)
-     
+- 6,version (1.8.8)
+     为部分伙伴的新需求，开启编辑模式 添加新方法 beginDrag().
+     
 ## 一些思想
    * 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
    * 2, RecyclerView的自定义LayoutManager + onItem touch / 应该也可以.
