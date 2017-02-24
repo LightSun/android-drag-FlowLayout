@@ -154,7 +154,7 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.8'
     public void finishDrag();
 ```
 
-## 重要版本更新日志。
+##  重要版本更新日志
 - 1, version(1.5.0)
    * （1) , 增加拖拽状态监听器 和 child view观察者
 - 2, version(1.5.1)
@@ -171,15 +171,16 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.8'
         });
 ```
 - 4, version(1.6.2)
-   * （1) , fix bug of issue(#1) 
+   *  fix bug of issue(#1) 
 - 5, version(1.8.3)
-   * fix a bug of multi fask click with touch scrol (解决多次点击+滑动的问题)
+   * fix a bug of multi fask click with touch scrol (解决多次点击+滑动的问题).
 - 6,version (1.8.8)
-   * 为部分伙伴的新需求，开启编辑模式 添加新方法 beginDrag().
-     
-## 一些思想
-   * 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
-   * 2, RecyclerView的自定义LayoutManager + onItem touch / 应该也可以.
+   * 为部分伙伴的新需求，开启编辑模式 添加新方法 beginDrag()。
+
+
+##  一些思想
+- 1 ，最开始我打算用DragHelper做的。但是发现不能将拖拽的child 渲染在最上面。
+- 2, RecyclerView的自定义LayoutManager + onItem touch / 应该也可以.
 
 
    
