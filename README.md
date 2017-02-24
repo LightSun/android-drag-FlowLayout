@@ -175,7 +175,7 @@ compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.8'
 - 5, version(1.8.3)
    * fix a bug of multi fask click with touch scrol (解决多次点击+滑动的问题).
 - 6,version (1.8.8)
-   * 为部分伙伴的新需求，开启编辑模式 添加新方法 beginDrag()。
+   * 为部分伙伴的新需求，开启编辑模式 添加新方法 beginDrag().
 
 
 ##  一些思想
