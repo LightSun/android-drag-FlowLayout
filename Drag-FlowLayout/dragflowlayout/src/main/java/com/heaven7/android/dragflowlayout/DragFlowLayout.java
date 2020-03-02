@@ -2,9 +2,6 @@ package com.heaven7.android.dragflowlayout;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
@@ -12,6 +9,10 @@ import android.view.MotionEvent;
 import android.view.SoundEffectConstants;
 import android.view.View;
 import android.view.accessibility.AccessibilityEvent;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.core.view.GestureDetectorCompat;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

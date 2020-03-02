@@ -1,7 +1,8 @@
 package com.heaven7.android.dragflowlayout;
 
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import androidx.recyclerview.widget.RecyclerView;
 
 /**
  * Created by heaven7 on 2016/10/27.

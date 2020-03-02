@@ -4,12 +4,12 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import com.android.volley.extra.util.VolleyUtil;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.heaven7.core.util.Toaster;
 import com.heaven7.core.util.ViewHelper;
 
@@ -20,7 +20,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
 
     private Toaster mToaster;
     private ViewHelper mViewHelper;
-    private VolleyUtil.HttpExecutor mHttpExecutor ;
     private IntentExecutor mIntentExecutor;
 
     protected abstract int getlayoutId();
@@ -34,13 +33,12 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mIntentExecutor = new IntentExecutor();
-        mHttpExecutor = new VolleyUtil.HttpExecutor();
         mToaster = new Toaster(this);
         mViewHelper = new ViewHelper(getWindow().getDecorView());
 
         onPreSetContentView();
         setContentView(getlayoutId());
-        ButterKnife.inject(this);
+        ButterKnife.bind(this);
 
         initView();
         initData(savedInstanceState);
@@ -67,9 +65,6 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         return mViewHelper;
     }
 
-   public VolleyUtil.HttpExecutor getHttpExecutor(){
-       return mHttpExecutor;
-   }
     public IntentExecutor getIntentExecutor() {
         return mIntentExecutor;
     }

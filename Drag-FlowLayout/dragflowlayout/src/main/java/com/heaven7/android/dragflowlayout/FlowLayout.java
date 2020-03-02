@@ -11,10 +11,6 @@ import android.view.ViewGroup;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * use {@link FlowLayout2} instead.
- */
-@Deprecated
 public class FlowLayout extends ViewGroup {
 
     private static final String TAG = "FlowLayout";

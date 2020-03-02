@@ -1,12 +1,15 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.LightSun'
 
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
-        minSdkVersion 11
-        targetSdkVersion 23
+        minSdkVersion 16
+        targetSdkVersion 28
         versionCode 188
         versionName "1.8.8"
     }
@@ -19,12 +22,15 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:23.3.0'
-    compile 'com.android.support:recyclerview-v7:23.1.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    compile 'com.heaven7.core.util:memory:1.0.5'
+    def androidX_ver='1.1.0'
+    implementation  "androidx.appcompat:appcompat:$androidX_ver"
+    implementation  "androidx.recyclerview:recyclerview:$androidX_ver"
+
+    implementation ('com.heaven7.core.util:memory:1.0.5'){
+        exclude group: 'com.android.support'
+    }
 }
 
-apply from: "bintrayUpload.gradle"
+//apply from: "bintrayUpload.gradle"

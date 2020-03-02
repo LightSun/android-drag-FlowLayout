@@ -1,10 +1,11 @@
 package com.heaven7.android.drag.demo;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
 
 import com.heaven7.adapter.BaseSelector;
 import com.heaven7.android.BaseActivity;
@@ -14,7 +15,7 @@ import com.heaven7.android.dragflowlayout.DragFlowLayout;
 import com.heaven7.android.dragflowlayout.IDraggable;
 import com.heaven7.android.dragflowlayout.IViewObserver;
 
-import butterknife.InjectView;
+import butterknife.BindView;
 import butterknife.OnClick;
 
 /** 拖拽流布局 示例程序
@@ -24,7 +25,7 @@ public class DragFlowLayoutTest extends BaseActivity {
 
     private static final String TAG = "DragFlowLayoutTest";
 
-    @InjectView(R.id.drag_flowLayout)
+    @BindView(R.id.drag_flowLayout)
     DragFlowLayout mDragflowLayout;
 
     private int mIndex;

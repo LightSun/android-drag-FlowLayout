@@ -1,8 +1,9 @@
 package com.heaven7.android.dragflowlayout;
 
-import android.support.annotation.LayoutRes;
-import android.support.annotation.NonNull;
 import android.view.View;
+
+import androidx.annotation.LayoutRes;
+import androidx.annotation.NonNull;
 
 /**
  * drag adapter, this class is unlike the {@link android.widget.BaseAdapter} or other adapter.
