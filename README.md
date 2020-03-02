@@ -55,8 +55,16 @@ this is a draggable flow layout lib (android 可拖拽的流布局库) .
 repositories {
         jcenter()
 }
-
-compile 'com.heaven7.android.dragflowlayout:dragflowlayout:1.8.8'
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        jcenter()
+        maven { url "https://jitpack.io" }
+    }
+}
+// if you use androidx . please use '1.8.8-x'
+implementation 'com.github.LightSun:android-drag-FlowLayout:1.8.8'
 ``` 
 ```java
  <com.heaven7.android.dragflowlayout.DragFlowLayout
