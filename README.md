@@ -51,15 +51,9 @@ this is a draggable flow layout lib (android 可拖拽的流布局库) .
 ## 使用步骤
 - 1, 导入下面的gradle 配置。并在xml中添加配置
 ```java
-//gradle
-repositories {
-        jcenter()
-}
+//root gradle
 allprojects {
     repositories {
-        google()
-        mavenCentral()
-        jcenter()
         maven { url "https://jitpack.io" }
     }
 }
